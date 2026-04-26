@@ -216,6 +216,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
 # ============================================================
 # Spécifique au projet Smart Predict AI
 # ============================================================
