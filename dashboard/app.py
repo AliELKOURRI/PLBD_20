@@ -1,8 +1,10 @@
 """
 Smart Predict AI — Dashboard Streamlit (mono-fichier).
 
-Dashboard SaaS moderne avec design teal/vert, gradients vifs, KPI cards
-custom, et animations subtiles.
+Dashboard SaaS moderne avec :
+- Page d'accueil splash animée (particules, gradients, glassmorphism)
+- 5 pages métier (vue d'ensemble, stock, prédictions, commandes, robot)
+- Design teal/vert avec animations subtiles
 
 Lancer le dashboard depuis la racine du projet :
     streamlit run dashboard/app.py
@@ -24,12 +26,22 @@ import streamlit as st
 from config.settings import settings
 from dashboard.styles import (
     get_plotly_theme,
+    inject_splash_styles,
     inject_styles,
     render_kpi_card,
     render_section_header,
+    render_splash_screen,
 )
 from helpers.data_manager import DataManager
 from prediction.prediction_engine import PredictionEngine
+
+
+# ============================================================
+# Initialisation du state pour le splash screen
+# ============================================================
+
+if "splash_shown" not in st.session_state:
+    st.session_state["splash_shown"] = False
 
 
 # ============================================================
@@ -40,10 +52,68 @@ st.set_page_config(
     page_title=settings.app_name,
     page_icon="🌿",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="expanded" if st.session_state.get("splash_shown") else "collapsed",
 )
 
-# Injection des styles custom (DOIT être fait après set_page_config)
+
+# ============================================================
+# SPLASH SCREEN (page d'accueil)
+# ============================================================
+
+if not st.session_state["splash_shown"]:
+    inject_splash_styles()
+
+    # Indique le mode splash via une classe CSS au body
+    st.markdown(
+        '<script>document.body.classList.add("splash-mode");</script>',
+        unsafe_allow_html=True,
+    )
+
+    # Configuration du splash
+    SPLASH_CONFIG = {
+        "project_name": "Smart Predict AI",
+        "subtitle": "Système intelligent de gestion d'entrepôt",
+        "tagline": "IA Prédictive · Automatisation · Optimisation",
+        "team_members": [
+            "Ali EL KOURRI",
+            "Ahmed Amine HADRI",
+            "Hatim EL GAOUTI",
+            "Able SAME",
+            "Mariam KRISSE",
+        ],
+        "supervisor": "M. JEBRANE Aissam",
+        "school": "École Centrale Casablanca",
+        "project_code": "PLBD 20",
+        "logo_emoji": "🌿",
+    }
+
+    # Affiche le splash screen
+    st.markdown(
+        render_splash_screen(**SPLASH_CONFIG),
+        unsafe_allow_html=True,
+    )
+
+    # Bouton "Commencer" centré
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col2:
+        st.markdown(
+            '<div style="display: flex; justify-content: center; margin-top: -100px; position: relative; z-index: 100;">',
+            unsafe_allow_html=True,
+        )
+        if st.button("🚀 Commencer", type="primary", use_container_width=True):
+            st.session_state["splash_shown"] = True
+            st.rerun()
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    # Stoppe l'exécution du reste du fichier
+    st.stop()
+
+
+# ============================================================
+# DASHBOARD NORMAL (uniquement si splash_shown == True)
+# ============================================================
+
+# Injection des styles custom
 inject_styles()
 
 PLOTLY_THEME = get_plotly_theme()
@@ -72,7 +142,6 @@ def format_number(value: float, suffix: str = "") -> str:
 
 
 def apply_plotly_theme(fig: go.Figure) -> go.Figure:
-    """Applique le thème global à un graphique Plotly."""
     fig.update_layout(**PLOTLY_THEME["layout"])
     return fig
 
@@ -105,11 +174,10 @@ if stock_df.empty:
 
 
 # ============================================================
-# Sidebar : navigation premium
+# Sidebar
 # ============================================================
 
 with st.sidebar:
-    # Logo et titre
     st.markdown("""
         <div style="text-align: center; padding: 1rem 0 0 0;">
             <div style="font-size: 3rem;">🌿</div>
@@ -140,6 +208,11 @@ with st.sidebar:
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
+    # Bouton retour à l'accueil
+    if st.button("← Retour à l'accueil", use_container_width=True):
+        st.session_state["splash_shown"] = False
+        st.rerun()
+
     # Footer sidebar
     st.markdown(f"""
         <div style="
@@ -147,7 +220,7 @@ with st.sidebar:
             background: rgba(16, 185, 129, 0.1);
             border-radius: 0.75rem;
             border: 1px solid rgba(16, 185, 129, 0.2);
-            margin-top: 2rem;
+            margin-top: 1rem;
         ">
             <div style="font-size: 0.75rem; color: #94a3b8; margin-bottom: 0.25rem;">
                 VERSION
@@ -161,8 +234,7 @@ with st.sidebar:
                 margin-top: 0.75rem;
                 line-height: 1.4;
             ">
-                PLBD 20<br>
-                École Centrale Casablanca
+                PLBD 20 · ECC
             </div>
         </div>
     """, unsafe_allow_html=True)
@@ -173,7 +245,6 @@ with st.sidebar:
 # ============================================================
 
 def render_overview() -> None:
-    # Header hero
     st.markdown("""
         <div style="margin-bottom: 2rem;">
             <h1 style="font-size: 2.75rem; margin-bottom: 0.5rem;">
@@ -190,7 +261,6 @@ def render_overview() -> None:
         </div>
     """, unsafe_allow_html=True)
 
-    # KPIs custom en cards modernes
     low_stock = dm.get_low_stock_products()
     total_units = stock_df["quantity"].sum() if not stock_df.empty else 0
     pending_orders = (
@@ -245,7 +315,7 @@ def render_overview() -> None:
             unsafe_allow_html=True,
         )
 
-    # Section : Alertes stock
+    # Alertes stock
     st.markdown(
         render_section_header(
             "🚨", "Alertes stock", "Produits nécessitant un réapprovisionnement"
@@ -264,7 +334,7 @@ def render_overview() -> None:
         display_df = display_df.sort_values("déficit", ascending=False)
         st.dataframe(display_df, use_container_width=True, hide_index=True)
 
-    # Section : Répartition par catégorie
+    # Catégories
     st.markdown(
         render_section_header(
             "📊", "Analyse par catégorie", "Répartition du stock dans l'entrepôt"
@@ -314,7 +384,7 @@ def render_overview() -> None:
         )
         st.plotly_chart(fig_bar, use_container_width=True)
 
-    # Section : Tendance demande
+    # Tendance
     st.markdown(
         render_section_header(
             "📈", "Tendance globale", "Évolution de la demande dans le temps"
@@ -409,7 +479,6 @@ def render_stock() -> None:
         )
         filtered = filtered[mask]
 
-    # KPIs filtrés
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown(
@@ -432,7 +501,6 @@ def render_stock() -> None:
             unsafe_allow_html=True,
         )
 
-    # Tableau
     st.markdown(
         render_section_header("📋", f"Liste des produits", f"{len(filtered)} résultats"),
         unsafe_allow_html=True,
@@ -451,7 +519,6 @@ def render_stock() -> None:
         hide_index=True,
     )
 
-    # Mise à jour manuelle
     st.markdown(
         render_section_header("✏️", "Mise à jour du stock",
                              "Ajouter ou retirer des unités"),
@@ -480,7 +547,6 @@ def render_stock() -> None:
             except ValueError as e:
                 st.error(f"❌ {e}")
 
-    # Visualisation
     st.markdown(
         render_section_header("📊", "Visualisation",
                              "Explorer la répartition du stock"),
@@ -602,7 +668,6 @@ def render_predictions() -> None:
         )
         st.plotly_chart(fig, use_container_width=True)
 
-        # Stats résumées en cards
         total = int(predictions.sum())
         avg = float(predictions.mean())
         max_day = predictions.idxmax().strftime("%Y-%m-%d")
@@ -629,7 +694,6 @@ def render_predictions() -> None:
                 unsafe_allow_html=True,
             )
 
-        # Tableau et recommandation
         col1, col2 = st.columns(2)
         with col1:
             pred_df = predictions.reset_index()
@@ -678,7 +742,6 @@ def render_predictions() -> None:
                     </div>
                 """, unsafe_allow_html=True)
 
-    # Comparaison multi-produits
     st.markdown(
         render_section_header("🔬", "Comparaison multi-produits",
                              "Compare jusqu'à 5 produits simultanément"),
@@ -736,7 +799,6 @@ def render_commandes() -> None:
     cmd_df = commandes_df.copy()
     cmd_df["order_date"] = pd.to_datetime(cmd_df["order_date"])
 
-    # KPIs cards
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.markdown(
@@ -766,7 +828,6 @@ def render_commandes() -> None:
             unsafe_allow_html=True,
         )
 
-    # Filtres
     with st.expander("🔍 Filtres avancés", expanded=False):
         col1, col2 = st.columns(2)
         with col1:
@@ -792,7 +853,6 @@ def render_commandes() -> None:
             (filtered["order_date"] >= start) & (filtered["order_date"] <= end)
         ]
 
-    # Tableau
     st.markdown(
         render_section_header("📋", f"Liste des commandes",
                              f"{len(filtered)} résultats filtrés"),
@@ -814,7 +874,6 @@ def render_commandes() -> None:
         hide_index=True,
     )
 
-    # Nouvelle commande
     st.markdown(
         render_section_header("➕", "Nouvelle commande",
                              "Passer une commande chez un fournisseur"),
@@ -851,7 +910,6 @@ def render_commandes() -> None:
             except Exception as e:
                 st.error(f"❌ {e}")
 
-    # Visualisations
     st.markdown(
         render_section_header("📊", "Analyse des commandes",
                              "Patterns et tendances"),
@@ -896,7 +954,7 @@ def render_commandes() -> None:
 
 
 # ============================================================
-# PAGE 5 : Robot (placeholder amélioré)
+# PAGE 5 : Robot (placeholder)
 # ============================================================
 
 def render_robot() -> None:
@@ -907,7 +965,6 @@ def render_robot() -> None:
         </p>
     """, unsafe_allow_html=True)
 
-    # Placeholder stylisé
     st.markdown("""
         <div style="
             background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
@@ -931,7 +988,6 @@ def render_robot() -> None:
         </div>
     """, unsafe_allow_html=True)
 
-    # Mock visualisation
     st.markdown(
         render_section_header("🎮", "Aperçu visuel", "Données simulées pour démo"),
         unsafe_allow_html=True,
