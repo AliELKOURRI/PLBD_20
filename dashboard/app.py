@@ -11,6 +11,11 @@ Lancer le dashboard depuis la racine du projet :
 
 from __future__ import annotations
 
+# Ajout du répertoire racine au PYTHONPATH pour que les imports fonctionnent
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from datetime import date
 
 import pandas as pd
