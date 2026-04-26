@@ -216,3 +216,40 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# ============================================================
+# Spécifique au projet Smart Predict AI
+# ============================================================
+
+# Données générées (reproductibles via helpers/generate_data.py)
+data/*.csv
+data/raw/*.csv
+data/processed/*
+
+# Modèles ML entraînés (reproductibles via PredictionEngine)
+data/models/*.pkl
+data/models/*.joblib
+
+# Fichiers temporaires de DataManager
+data/**/*.lock
+data/**/*.tmp
+
+# Garder les dossiers vides dans Git malgré les exclusions ci-dessus
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/models/.gitkeep
+
+# Logs applicatifs
+logs/
+*.log
+
+# Fichiers temporaires divers
+*.bak
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Notes personnelles, brouillons (à exclure du repo)
+NOTES.md
+TODO.md
+scratch/
+test_*.py
