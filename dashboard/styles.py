@@ -300,11 +300,19 @@ section[data-testid="stSidebar"] {
     display: none !important;
 }
 
+/* Le main container doit pouvoir contenir le bouton par-dessus le splash */
 .main .block-container {
     max-width: 100% !important;
     padding: 0 !important;
+    position: relative !important;
+    z-index: 100 !important;
 }
 
+[data-testid="stAppViewContainer"] {
+    position: relative !important;
+}
+
+/* Le splash en arrière-plan */
 .splash-container {
     position: fixed;
     top: 0;
@@ -314,6 +322,7 @@ section[data-testid="stSidebar"] {
     background: linear-gradient(135deg, #0f172a 0%, #064e3b 50%, #0f172a 100%);
     overflow: hidden;
     z-index: 1;
+    pointer-events: none;
 }
 
 .particles {
@@ -425,6 +434,7 @@ section[data-testid="stSidebar"] {
     justify-content: center;
     height: 100vh;
     padding: 2rem;
+    padding-bottom: 8rem;
     text-align: center;
     color: white;
     animation: fadeInScale 1s ease-out;
@@ -583,7 +593,25 @@ section[data-testid="stSidebar"] {
     color: #94a3b8;
 }
 
-/* Bouton commencer (mode splash) */
+/* ============ Bouton Commencer (mode splash) ============ */
+
+/* Le conteneur principal du bouton est positionné en bas, au-dessus du splash */
+.main .block-container {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-end !important;
+    min-height: 100vh !important;
+    padding-bottom: 60px !important;
+}
+
+/* Le bouton lui-même : centré horizontalement avec gradient et animation */
+.stButton {
+    display: flex !important;
+    justify-content: center !important;
+    z-index: 999 !important;
+    position: relative !important;
+}
+
 .stButton > button {
     background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%) !important;
     color: white !important;
@@ -596,6 +624,9 @@ section[data-testid="stSidebar"] {
     letter-spacing: 0.05em !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     text-transform: uppercase !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
+    min-width: 250px !important;
 }
 
 .stButton > button:hover {

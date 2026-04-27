@@ -63,12 +63,6 @@ st.set_page_config(
 if not st.session_state["splash_shown"]:
     inject_splash_styles()
 
-    # Indique le mode splash via une classe CSS au body
-    st.markdown(
-        '<script>document.body.classList.add("splash-mode");</script>',
-        unsafe_allow_html=True,
-    )
-
     # Configuration du splash
     SPLASH_CONFIG = {
         "project_name": "Smart Predict AI",
@@ -87,23 +81,18 @@ if not st.session_state["splash_shown"]:
         "logo_emoji": "🌿",
     }
 
-    # Affiche le splash screen
+    # Affiche le splash screen en arrière-plan (position: fixed)
     st.markdown(
         render_splash_screen(**SPLASH_CONFIG),
         unsafe_allow_html=True,
     )
 
-    # Bouton "Commencer" centré
-    col1, col2, col3 = st.columns([1, 1, 1])
-    with col2:
-        st.markdown(
-            '<div style="display: flex; justify-content: center; margin-top: -100px; position: relative; z-index: 100;">',
-            unsafe_allow_html=True,
-        )
+    # Bouton "Commencer" rendu APRÈS le splash, positionné en bas via CSS
+    spacer1, btn_col, spacer2 = st.columns([2, 1, 2])
+    with btn_col:
         if st.button("🚀 Commencer", type="primary", use_container_width=True):
             st.session_state["splash_shown"] = True
             st.rerun()
-        st.markdown('</div>', unsafe_allow_html=True)
 
     # Stoppe l'exécution du reste du fichier
     st.stop()
