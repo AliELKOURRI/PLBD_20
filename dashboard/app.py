@@ -63,7 +63,6 @@ st.set_page_config(
 if not st.session_state["splash_shown"]:
     inject_splash_styles()
 
-    # Configuration du splash
     SPLASH_CONFIG = {
         "project_name": "Smart Predict AI",
         "subtitle": "Système intelligent de gestion d'entrepôt",
@@ -81,36 +80,28 @@ if not st.session_state["splash_shown"]:
         "logo_emoji": "🌿",
     }
 
-    # Affiche le splash screen en arrière-plan (position: fixed)
     st.markdown(
         render_splash_screen(**SPLASH_CONFIG),
         unsafe_allow_html=True,
     )
 
-    # Bouton "Commencer" rendu APRÈS le splash, positionné en bas via CSS
     spacer1, btn_col, spacer2 = st.columns([2, 1, 2])
     with btn_col:
         if st.button("🚀 Commencer", type="primary", use_container_width=True):
             st.session_state["splash_shown"] = True
             st.rerun()
 
-    # Stoppe l'exécution du reste du fichier
     st.stop()
 
 
 # ============================================================
-# DASHBOARD NORMAL (uniquement si splash_shown == True)
+# DASHBOARD NORMAL
 # ============================================================
 
-# Injection des styles custom
 inject_styles()
 
 PLOTLY_THEME = get_plotly_theme()
 
-
-# ============================================================
-# Helpers
-# ============================================================
 
 @st.cache_resource
 def get_data_manager() -> DataManager:
@@ -197,12 +188,10 @@ with st.sidebar:
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
-    # Bouton retour à l'accueil
     if st.button("← Retour à l'accueil", use_container_width=True):
         st.session_state["splash_shown"] = False
         st.rerun()
 
-    # Footer sidebar
     st.markdown(f"""
         <div style="
             padding: 1rem;
@@ -304,7 +293,6 @@ def render_overview() -> None:
             unsafe_allow_html=True,
         )
 
-    # Alertes stock
     st.markdown(
         render_section_header(
             "🚨", "Alertes stock", "Produits nécessitant un réapprovisionnement"
@@ -323,7 +311,6 @@ def render_overview() -> None:
         display_df = display_df.sort_values("déficit", ascending=False)
         st.dataframe(display_df, use_container_width=True, hide_index=True)
 
-    # Catégories
     st.markdown(
         render_section_header(
             "📊", "Analyse par catégorie", "Répartition du stock dans l'entrepôt"
@@ -373,7 +360,6 @@ def render_overview() -> None:
         )
         st.plotly_chart(fig_bar, use_container_width=True)
 
-    # Tendance
     st.markdown(
         render_section_header(
             "📈", "Tendance globale", "Évolution de la demande dans le temps"
@@ -574,7 +560,7 @@ def render_stock() -> None:
 
 
 # ============================================================
-# PAGE 3 : Prédictions
+# PAGE 3 : Prédictions (avec modèle + évaluation)
 # ============================================================
 
 def render_predictions() -> None:
@@ -605,8 +591,8 @@ def render_predictions() -> None:
 
     if st.button("🚀 Lancer la prédiction", type="primary"):
         with st.spinner(
-            "🧠 Le modèle analyse les patterns historiques... "
-            "(30-60s la première fois, instantané ensuite)"
+            "🧠 Le modèle analyse les patterns historiques et évalue sa performance... "
+            "(1-2 min la première fois, instantané ensuite)"
         ):
             try:
                 predictions = engine.predict(
@@ -614,8 +600,17 @@ def render_predictions() -> None:
                     n_days=horizon,
                     history_csv=settings.historique_csv,
                 )
+                model_info = engine.get_model_info(product_id)
+                evaluation = engine.evaluate_model(
+                    product_id=product_id,
+                    history_csv=settings.historique_csv,
+                    test_ratio=0.2,
+                )
+
                 st.session_state["last_predictions"] = predictions
                 st.session_state["last_product"] = product_id
+                st.session_state["last_model_info"] = model_info
+                st.session_state["last_evaluation"] = evaluation
                 st.success("✅ Prédiction terminée avec succès")
             except Exception as e:
                 st.error(f"❌ Erreur : {e}")
@@ -624,10 +619,193 @@ def render_predictions() -> None:
     if "last_predictions" in st.session_state:
         predictions = st.session_state["last_predictions"]
         last_product = st.session_state["last_product"]
+        model_info = st.session_state.get("last_model_info", {})
+        evaluation = st.session_state.get("last_evaluation", {})
 
+        # ============ Badge du modèle utilisé ============
+        if model_info:
+            st.markdown(f"""
+                <div style="
+                    margin: 1.5rem 0;
+                    padding: 1.25rem 1.5rem;
+                    background: linear-gradient(135deg, {model_info['color']}15 0%, {model_info['color']}05 100%);
+                    border: 1px solid {model_info['color']}40;
+                    border-left: 4px solid {model_info['color']};
+                    border-radius: 1rem;
+                ">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="
+                            font-size: 2.5rem;
+                            line-height: 1;
+                            background: {model_info['color']}20;
+                            padding: 0.75rem;
+                            border-radius: 0.75rem;
+                        ">{model_info['icon']}</div>
+                        <div style="flex: 1;">
+                            <div style="
+                                font-size: 0.75rem;
+                                color: #64748b;
+                                letter-spacing: 0.1em;
+                                text-transform: uppercase;
+                                font-weight: 600;
+                                margin-bottom: 0.25rem;
+                            ">Algorithme sélectionné automatiquement</div>
+                            <div style="
+                                font-size: 1.5rem;
+                                font-weight: 700;
+                                color: {model_info['color']};
+                                margin-bottom: 0.5rem;
+                            ">{model_info['model_name']}</div>
+                            <div style="
+                                font-size: 0.95rem;
+                                color: #475569;
+                                line-height: 1.5;
+                            ">{model_info['description']}</div>
+                        </div>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+
+        # ============ Section : Évaluation du modèle ============
+        if evaluation:
+            st.markdown(
+                render_section_header(
+                    "🎯", "Performance du modèle",
+                    f"Évaluation sur {evaluation['n_test']} jours de données réelles"
+                ),
+                unsafe_allow_html=True,
+            )
+
+            col1, col2, col3, col4 = st.columns(4)
+
+            with col1:
+                score = evaluation["reliability_score"]
+                if score >= 80:
+                    grad = "success"
+                    label_extra = "Excellent"
+                elif score >= 60:
+                    grad = "main"
+                    label_extra = "Bon"
+                elif score >= 40:
+                    grad = "warning"
+                    label_extra = "Moyen"
+                else:
+                    grad = "danger"
+                    label_extra = "À améliorer"
+
+                st.markdown(
+                    render_kpi_card(
+                        icon="🏆",
+                        label="Score de fiabilité",
+                        value=f"{score:.0f}/100",
+                        sublabel=label_extra,
+                        gradient=grad,
+                    ),
+                    unsafe_allow_html=True,
+                )
+
+            with col2:
+                st.markdown(
+                    render_kpi_card(
+                        icon="📊",
+                        label="Erreur moyenne",
+                        value=f"{evaluation['mape']:.1f}%",
+                        sublabel="MAPE",
+                        gradient="purple",
+                    ),
+                    unsafe_allow_html=True,
+                )
+
+            with col3:
+                st.markdown(
+                    render_kpi_card(
+                        icon="📏",
+                        label="MAE",
+                        value=f"{evaluation['mae']:.1f} u.",
+                        sublabel="Erreur absolue moyenne",
+                        gradient="main",
+                    ),
+                    unsafe_allow_html=True,
+                )
+
+            with col4:
+                st.markdown(
+                    render_kpi_card(
+                        icon="📐",
+                        label="RMSE",
+                        value=f"{evaluation['rmse']:.1f} u.",
+                        sublabel="Racine erreur quadratique",
+                        gradient="warning",
+                    ),
+                    unsafe_allow_html=True,
+                )
+
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.markdown(f"""
+                <h4 style="font-size: 1.125rem; color: #0f172a; font-weight: 600; margin-bottom: 0.5rem;">
+                    🔬 Validation : prédit vs réel
+                </h4>
+                <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 1rem;">
+                    Comparaison sur la période de test ({evaluation["n_test"]} derniers jours qui n'ont pas servi à l'entraînement)
+                </p>
+            """, unsafe_allow_html=True)
+
+            fig_eval = go.Figure()
+            fig_eval.add_trace(go.Scatter(
+                x=evaluation["test_dates"],
+                y=evaluation["actual_values"],
+                mode="lines+markers",
+                name="Demande réelle",
+                line=dict(color="#0ea5e9", width=3),
+                marker=dict(size=8),
+            ))
+            fig_eval.add_trace(go.Scatter(
+                x=evaluation["test_dates"],
+                y=evaluation["predicted_values"],
+                mode="lines+markers",
+                name="Prédiction du modèle",
+                line=dict(color="#10b981", width=3, dash="dash"),
+                marker=dict(size=8, symbol="diamond"),
+            ))
+            fig_eval = apply_plotly_theme(fig_eval)
+            fig_eval.update_layout(
+                xaxis_title="Date",
+                yaxis_title="Quantité demandée",
+                height=400,
+                hovermode="x unified",
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            )
+            st.plotly_chart(fig_eval, use_container_width=True)
+
+            st.markdown(f"""
+                <div style="
+                    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+                    padding: 1.25rem 1.5rem;
+                    border-radius: 1rem;
+                    border-left: 4px solid #3b82f6;
+                    margin-top: 1rem;
+                ">
+                    <div style="font-size: 0.875rem; font-weight: 700; color: #1e40af; margin-bottom: 0.5rem;">
+                        📐 Méthodologie d'évaluation
+                    </div>
+                    <div style="color: #1e3a8a; line-height: 1.6; font-size: 0.9rem;">
+                        Le modèle a été entraîné sur les <strong>{evaluation['n_train']} premiers jours</strong> de l'historique,
+                        puis évalué en prédisant les <strong>{evaluation['n_test']} derniers jours</strong> (soit {int(evaluation['test_ratio']*100)}% du jeu de données).
+                        Le graphique compare les valeurs prédites par le modèle aux valeurs <em>réellement observées</em> sur cette période.<br><br>
+                        <strong>MAPE</strong> ({evaluation['mape']:.1f}%) : pourcentage d'erreur moyen entre prédit et réel — plus c'est bas, mieux c'est.<br>
+                        <strong>MAE</strong> ({evaluation['mae']:.1f} u.) : écart absolu moyen en unités.<br>
+                        <strong>RMSE</strong> ({evaluation['rmse']:.1f} u.) : pénalise davantage les grosses erreurs.<br>
+                        <strong>Score de fiabilité</strong> : indicateur synthétique calculé à partir du MAPE (100 - MAPE, plafonné à 100).
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+
+        # ============ Section : Prévisions futures ============
         st.markdown(
-            render_section_header("📊", f"Prévisions pour {last_product}",
-                                 "Historique récent + projection IA"),
+            render_section_header(
+                "📊", f"Prévisions futures pour {last_product}",
+                "Projection sur les jours à venir"
+            ),
             unsafe_allow_html=True,
         )
 
@@ -731,6 +909,7 @@ def render_predictions() -> None:
                     </div>
                 """, unsafe_allow_html=True)
 
+    # Comparaison multi-produits
     st.markdown(
         render_section_header("🔬", "Comparaison multi-produits",
                              "Compare jusqu'à 5 produits simultanément"),
