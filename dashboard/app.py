@@ -1,10 +1,16 @@
 """
 Smart Predict AI — Dashboard Streamlit (mono-fichier).
 
+<<<<<<< HEAD
 Dashboard SaaS moderne avec :
 - Page d'accueil splash animée (particules, gradients, glassmorphism)
 - 5 pages métier (vue d'ensemble, stock, prédictions, commandes, robot)
 - Design teal/vert avec animations subtiles
+=======
+Toutes les sections de l'application dans un seul fichier, avec une navigation
+par sidebar (radio). C'est plus simple à maintenir et à présenter qu'une
+architecture multi-pages.
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 
 Lancer le dashboard depuis la racine du projet :
     streamlit run dashboard/app.py
@@ -12,10 +18,13 @@ Lancer le dashboard depuis la racine du projet :
 
 from __future__ import annotations
 
+<<<<<<< HEAD
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+=======
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 from datetime import date
 
 import pandas as pd
@@ -24,6 +33,7 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from config.settings import settings
+<<<<<<< HEAD
 from dashboard.styles import (
     get_plotly_theme,
     inject_splash_styles,
@@ -45,6 +55,10 @@ from robot_serveur.api_client import RobotClient
 
 if "splash_shown" not in st.session_state:
     st.session_state["splash_shown"] = False
+=======
+from helpers.data_manager import DataManager
+from prediction.prediction_engine import PredictionEngine
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 
 
 # ============================================================
@@ -53,13 +67,18 @@ if "splash_shown" not in st.session_state:
 
 st.set_page_config(
     page_title=settings.app_name,
+<<<<<<< HEAD
     page_icon="🌿",
+=======
+    page_icon="🏭",
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 
 # ============================================================
+<<<<<<< HEAD
 # SPLASH SCREEN (page d'accueil)
 # ============================================================
 
@@ -108,15 +127,31 @@ PLOTLY_THEME = get_plotly_theme()
 
 @st.cache_resource
 def get_data_manager() -> DataManager:
+=======
+# Helpers (anciennement dans utils.py)
+# ============================================================
+
+@st.cache_resource
+def get_data_manager() -> DataManager:
+    """Instance unique du DataManager, partagée pour toute la session."""
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     return DataManager(data_dir=settings.data_dir)
 
 
 @st.cache_resource
 def get_prediction_engine() -> PredictionEngine:
+<<<<<<< HEAD
+=======
+    """Instance unique du PredictionEngine, partagée pour toute la session."""
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     return PredictionEngine(models_dir=settings.models_dir)
 
 
 def format_number(value: float, suffix: str = "") -> str:
+<<<<<<< HEAD
+=======
+    """Format compact pour les KPIs (1234 -> 1.2k, etc.)."""
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     if value >= 1_000_000:
         return f"{value/1_000_000:.1f}M{suffix}"
     if value >= 1_000:
@@ -124,11 +159,14 @@ def format_number(value: float, suffix: str = "") -> str:
     return f"{int(value)}{suffix}"
 
 
+<<<<<<< HEAD
 def apply_plotly_theme(fig: go.Figure) -> go.Figure:
     fig.update_layout(**PLOTLY_THEME["layout"])
     return fig
 
 
+=======
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 # ============================================================
 # Chargement initial des données
 # ============================================================
@@ -157,6 +195,7 @@ if stock_df.empty:
 
 
 # ============================================================
+<<<<<<< HEAD
 # Sidebar
 # ============================================================
 
@@ -181,10 +220,23 @@ with st.sidebar:
 
     page = st.radio(
         "Navigation",
+=======
+# Sidebar : navigation + infos
+# ============================================================
+
+with st.sidebar:
+    st.title("🏭 Smart Predict AI")
+    st.caption("Entrepôt intelligent")
+    st.markdown("---")
+
+    page = st.radio(
+        "📂 Navigation",
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         options=[
             "🏠 Vue d'ensemble",
             "📦 Stock",
             "📈 Prédictions",
+<<<<<<< HEAD
             "📍 Emplacements",
             "🚚 Commandes",
             "🤖 Robot",
@@ -213,6 +265,17 @@ with st.sidebar:
         f'font-weight:600;">PLBD 20 · ECC</div></div>',
         unsafe_allow_html=True,
     )
+=======
+            "🚚 Commandes",
+            "🤖 Robot",
+        ],
+        label_visibility="visible",
+    )
+
+    st.markdown("---")
+    st.caption(f"**{settings.app_name}** v{settings.app_version}")
+    st.caption("PLBD 20 — École Centrale Casablanca")
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 
 
 # ============================================================
@@ -220,17 +283,26 @@ with st.sidebar:
 # ============================================================
 
 def render_overview() -> None:
+<<<<<<< HEAD
     st.markdown(
         render_page_header("Vue d'ensemble", "Pilotage en temps reel de votre entrepot intelligent"),
         unsafe_allow_html=True,
     )
 
+=======
+    st.title("🏭 Vue d'ensemble")
+    st.markdown("---")
+
+    # KPIs principaux
+    col1, col2, col3, col4 = st.columns(4)
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     low_stock = dm.get_low_stock_products()
     total_units = stock_df["quantity"].sum() if not stock_df.empty else 0
     pending_orders = (
         (commandes_df["status"] == "pending").sum() if not commandes_df.empty else 0
     )
 
+<<<<<<< HEAD
     col1, col2, col3, col4 = st.columns(4, gap="medium")
 
     with col1:
@@ -371,6 +443,80 @@ def render_overview() -> None:
         ),
         unsafe_allow_html=True,
     )
+=======
+    col1.metric(
+        "📦 Produits en stock",
+        len(stock_df),
+        help="Nombre de références produit dans l'entrepôt.",
+    )
+    col2.metric(
+        "📊 Unités totales",
+        format_number(total_units),
+        help="Somme des quantités sur tous les produits.",
+    )
+    col3.metric(
+        "⚠️ Produits sous seuil",
+        len(low_stock),
+        delta=f"-{len(low_stock)}" if len(low_stock) > 0 else None,
+        delta_color="inverse",
+    )
+    col4.metric("🚚 Commandes en attente", int(pending_orders))
+
+    st.markdown("---")
+
+    # Alertes stock
+    st.subheader("⚠️ Alertes stock")
+    if low_stock.empty:
+        st.success("✅ Aucun produit sous le seuil minimum. Stock sain.")
+    else:
+        st.warning(f"{len(low_stock)} produit(s) à réapprovisionner.")
+        display_df = low_stock[
+            ["product_id", "name", "category", "quantity", "min_threshold", "location"]
+        ].copy()
+        display_df["déficit"] = display_df["min_threshold"] - display_df["quantity"]
+        display_df = display_df.sort_values("déficit", ascending=False)
+        st.dataframe(
+            display_df,
+            use_container_width=True,
+            hide_index=True,
+        )
+
+    # Répartition par catégorie
+    st.markdown("---")
+    st.subheader("📊 Répartition du stock par catégorie")
+
+    col_left, col_right = st.columns(2)
+
+    with col_left:
+        if not stock_df.empty:
+            cat_counts = stock_df.groupby("category").size().reset_index(name="count")
+            fig_pie = px.pie(
+                cat_counts,
+                values="count",
+                names="category",
+                title="Nombre de produits par catégorie",
+                hole=0.4,
+            )
+            fig_pie.update_layout(height=400)
+            st.plotly_chart(fig_pie, use_container_width=True)
+
+    with col_right:
+        if not stock_df.empty:
+            cat_qty = stock_df.groupby("category")["quantity"].sum().reset_index()
+            fig_bar = px.bar(
+                cat_qty,
+                x="category",
+                y="quantity",
+                title="Volume total par catégorie",
+                color="category",
+            )
+            fig_bar.update_layout(showlegend=False, height=400)
+            st.plotly_chart(fig_bar, use_container_width=True)
+
+    # Tendance globale de la demande
+    st.markdown("---")
+    st.subheader("📈 Tendance globale de la demande")
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 
     if historique_df.empty:
         st.info("Aucun historique de demande disponible.")
@@ -378,6 +524,7 @@ def render_overview() -> None:
         daily = historique_df.groupby("date")["quantity"].sum().reset_index()
         daily = daily.sort_values("date")
 
+<<<<<<< HEAD
         fig = go.Figure()
         fig.add_trace(go.Scatter(
             x=daily["date"],
@@ -397,11 +544,23 @@ def render_overview() -> None:
             hovermode="x unified",
             showlegend=False,
         )
+=======
+        fig = px.line(
+            daily,
+            x="date",
+            y="quantity",
+            title="Demande journalière totale (toutes catégories confondues)",
+            labels={"date": "Date", "quantity": "Unités demandées"},
+        )
+        fig.update_traces(line=dict(width=2))
+        fig.update_layout(height=400, hovermode="x unified")
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         st.plotly_chart(fig, use_container_width=True)
 
         last_7 = daily.tail(7)
         avg_last = last_7["quantity"].mean()
         avg_total = daily["quantity"].mean()
+<<<<<<< HEAD
         delta = avg_last - avg_total
         delta_color = "#10b981" if delta >= 0 else "#ef4444"
         delta_icon = "📈" if delta >= 0 else "📉"
@@ -415,6 +574,11 @@ def render_overview() -> None:
                 style="success" if delta >= 0 else "warning",
             ),
             unsafe_allow_html=True,
+=======
+        st.caption(
+            f"Moyenne sur 7 derniers jours : **{avg_last:.0f} unités/jour** "
+            f"(écart moyenne globale : {avg_last - avg_total:+.0f})"
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         )
 
 
@@ -423,6 +587,7 @@ def render_overview() -> None:
 # ============================================================
 
 def render_stock() -> None:
+<<<<<<< HEAD
     st.markdown(
         render_page_header("Gestion du stock", "Inventaire en temps reel de l'entrepot"),
         unsafe_allow_html=True,
@@ -433,11 +598,26 @@ def render_stock() -> None:
         with col1:
             categories = sorted(stock_df["category"].unique())
             selected_cats = st.multiselect("Categories", categories, default=categories)
+=======
+    st.title("📦 Gestion du stock")
+    st.markdown("---")
+
+    # Filtres
+    with st.expander("🔍 Filtres", expanded=True):
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            categories = sorted(stock_df["category"].unique())
+            selected_cats = st.multiselect("Catégories", categories, default=categories)
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         with col2:
             show_low_only = st.checkbox("Seulement produits sous seuil")
         with col3:
             search = st.text_input("Rechercher", placeholder="Nom ou ID...")
 
+<<<<<<< HEAD
+=======
+    # Application des filtres
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     filtered = stock_df[stock_df["category"].isin(selected_cats)].copy()
     if show_low_only:
         filtered = filtered[filtered["quantity"] < filtered["min_threshold"]]
@@ -448,6 +628,7 @@ def render_stock() -> None:
         )
         filtered = filtered[mask]
 
+<<<<<<< HEAD
     col1, col2, col3 = st.columns(3, gap="medium")
     with col1:
         st.markdown(
@@ -474,6 +655,21 @@ def render_stock() -> None:
         render_section_header("📋", "Liste des produits", f"{len(filtered)} resultats"),
         unsafe_allow_html=True,
     )
+=======
+    # KPIs filtrés
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Produits affichés", len(filtered))
+    col2.metric("Unités totales", int(filtered["quantity"].sum()))
+    col3.metric(
+        "Sous seuil",
+        int((filtered["quantity"] < filtered["min_threshold"]).sum()),
+    )
+
+    st.markdown("---")
+
+    # Tableau avec statut visuel
+    st.subheader(f"Liste des produits ({len(filtered)} résultats)")
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     display = filtered.copy()
     display["statut"] = display.apply(
         lambda r: "🔴 Critique" if r["quantity"] < r["min_threshold"]
@@ -483,11 +679,16 @@ def render_stock() -> None:
     )
     st.dataframe(
         display[["product_id", "name", "category", "quantity",
+<<<<<<< HEAD
                  "min_threshold", "location", "color", "statut"]],
+=======
+                 "min_threshold", "location", "statut"]],
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         use_container_width=True,
         hide_index=True,
     )
 
+<<<<<<< HEAD
     st.markdown(
         render_section_header("✏️", "Mise a jour du stock",
                              "Ajouter ou retirer des unites"),
@@ -495,6 +696,14 @@ def render_stock() -> None:
     )
     with st.form("update_stock_form"):
         col1, col2, col3 = st.columns([2, 1, 1], gap="medium")
+=======
+    # Mise à jour manuelle
+    st.markdown("---")
+    st.subheader("✏️ Mise à jour manuelle du stock")
+
+    with st.form("update_stock_form"):
+        col1, col2, col3 = st.columns([2, 1, 1])
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         with col1:
             product_id = st.selectbox(
                 "Produit",
@@ -502,7 +711,14 @@ def render_stock() -> None:
                 format_func=lambda pid: f"{pid} - {stock_df.loc[stock_df['product_id'] == pid, 'name'].iloc[0]}",
             )
         with col2:
+<<<<<<< HEAD
             delta = st.number_input("Variation", value=0, step=1)
+=======
+            delta = st.number_input(
+                "Variation (+ ou -)", value=0, step=1,
+                help="Positif = ajout, négatif = retrait",
+            )
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         with col3:
             st.write("")
             st.write("")
@@ -511,11 +727,16 @@ def render_stock() -> None:
         if submitted and delta != 0:
             try:
                 new_qty = dm.update_stock_quantity(product_id, delta)
+<<<<<<< HEAD
                 st.success(f"✅ Stock {product_id} mis a jour : {new_qty}")
+=======
+                st.success(f"✅ Stock {product_id} mis à jour : {new_qty}")
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
                 st.rerun()
             except ValueError as e:
                 st.error(f"❌ {e}")
 
+<<<<<<< HEAD
     st.markdown(
         render_section_header("📊", "Visualisation",
                              "Explorer la repartition du stock"),
@@ -539,22 +760,53 @@ def render_stock() -> None:
         fig = px.bar(
             cat_data, x="category", y="quantity",
             title="Quantite totale par categorie", color="category",
+=======
+    # Visualisation
+    st.markdown("---")
+    st.subheader("📊 Visualisation du stock")
+
+    view_mode = st.radio(
+        "Type de visualisation",
+        ["Quantité par produit", "Quantité par catégorie", "Top 10 produits"],
+        horizontal=True,
+    )
+
+    if view_mode == "Quantité par produit":
+        fig = px.bar(
+            filtered.sort_values("quantity", ascending=False),
+            x="product_id", y="quantity", color="category",
+            title="Quantité en stock par produit",
+        )
+    elif view_mode == "Quantité par catégorie":
+        cat_data = filtered.groupby("category")["quantity"].sum().reset_index()
+        fig = px.bar(
+            cat_data, x="category", y="quantity",
+            title="Quantité totale par catégorie", color="category",
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         )
     else:
         top10 = filtered.nlargest(10, "quantity")
         fig = px.bar(
             top10, x="quantity", y="name", orientation="h",
+<<<<<<< HEAD
             title="Top 10 des produits les plus stockes", color="category",
         )
         fig.update_layout(yaxis={"categoryorder": "total ascending"})
 
     fig = apply_plotly_theme(fig)
     fig.update_traces(marker_line_width=0, marker_cornerradius=5)
+=======
+            title="Top 10 des produits les plus stockés", color="category",
+        )
+        fig.update_layout(yaxis={"categoryorder": "total ascending"})
+
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     fig.update_layout(height=500)
     st.plotly_chart(fig, use_container_width=True)
 
 
 # ============================================================
+<<<<<<< HEAD
 # PAGE 3 : Prédictions (avec modèle + évaluation)
 # ============================================================
 
@@ -563,11 +815,20 @@ def render_predictions() -> None:
         render_page_header("Previsions de demande", "IA predictive avec auto-selection du meilleur modele"),
         unsafe_allow_html=True,
     )
+=======
+# PAGE 3 : Prédictions
+# ============================================================
+
+def render_predictions() -> None:
+    st.title("📈 Prévisions de demande")
+    st.markdown("---")
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 
     if historique_df.empty:
         st.warning("Aucun historique de demande disponible.")
         return
 
+<<<<<<< HEAD
     st.markdown(
         render_section_header("⚙️", "Configuration", "Selectionne un produit et un horizon de prediction"),
         unsafe_allow_html=True,
@@ -577,20 +838,39 @@ def render_predictions() -> None:
     with col1:
         product_id = st.selectbox(
             "Selectionne un produit",
+=======
+    # Sélection produit + horizon
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        product_id = st.selectbox(
+            "Sélectionne un produit",
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
             options=stock_df["product_id"].tolist(),
             format_func=lambda pid: f"{pid} - {stock_df.loc[stock_df['product_id'] == pid, 'name'].iloc[0]}",
         )
     with col2:
         horizon = st.slider(
+<<<<<<< HEAD
             "Horizon (jours)",
+=======
+            "Horizon de prévision (jours)",
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
             min_value=1, max_value=30,
             value=settings.default_forecast_horizon,
         )
 
+<<<<<<< HEAD
     if st.button("🚀 Lancer la prediction", type="primary"):
         with st.spinner(
             "🧠 Le modele analyse les patterns historiques et evalue sa performance... "
             "(1-2 min la premiere fois, instantane ensuite)"
+=======
+    # Lancement
+    if st.button("🚀 Lancer la prédiction", type="primary"):
+        with st.spinner(
+            "Entraînement du modèle (auto-sélection entre Régression, ARIMA, SARIMA)... "
+            "Cela peut prendre 30-60s la première fois pour ce produit."
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         ):
             try:
                 predictions = engine.predict(
@@ -598,6 +878,7 @@ def render_predictions() -> None:
                     n_days=horizon,
                     history_csv=settings.historique_csv,
                 )
+<<<<<<< HEAD
                 model_info = engine.get_model_info(product_id)
                 evaluation = engine.evaluate_model(
                     product_id=product_id,
@@ -610,10 +891,16 @@ def render_predictions() -> None:
                 st.session_state["last_model_info"] = model_info
                 st.session_state["last_evaluation"] = evaluation
                 st.success("✅ Prediction terminee avec succes")
+=======
+                st.session_state["last_predictions"] = predictions
+                st.session_state["last_product"] = product_id
+                st.success("✅ Prédiction terminée")
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
             except Exception as e:
                 st.error(f"❌ Erreur : {e}")
                 return
 
+<<<<<<< HEAD
     if "last_predictions" in st.session_state:
         predictions = st.session_state["last_predictions"]
         last_product = st.session_state["last_product"]
@@ -781,6 +1068,17 @@ def render_predictions() -> None:
             unsafe_allow_html=True,
         )
 
+=======
+    # Affichage des résultats
+    if "last_predictions" in st.session_state:
+        predictions = st.session_state["last_predictions"]
+        last_product = st.session_state["last_product"]
+
+        st.markdown("---")
+        st.subheader(f"📊 Prévisions pour {last_product}")
+
+        # Historique récent + prévisions
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         hist = historique_df[historique_df["product_id"] == last_product].copy()
         hist = hist.groupby("date")["quantity"].sum().reset_index()
         hist = hist.sort_values("date").tail(60)
@@ -789,6 +1087,7 @@ def render_predictions() -> None:
         fig.add_trace(go.Scatter(
             x=hist["date"], y=hist["quantity"],
             mode="lines", name="Historique",
+<<<<<<< HEAD
             line=dict(color="#0ea5e9", width=2, shape="spline"),
             fill="tozeroy",
             fillcolor="rgba(14, 165, 233, 0.06)",
@@ -845,10 +1144,47 @@ def render_predictions() -> None:
             st.dataframe(pred_df, use_container_width=True, hide_index=True)
 
         with col2:
+=======
+            line=dict(color="#1f77b4", width=2),
+        ))
+        fig.add_trace(go.Scatter(
+            x=predictions.index, y=predictions.values,
+            mode="lines+markers", name="Prédiction",
+            line=dict(color="#ff7f0e", width=3, dash="dash"),
+            marker=dict(size=8),
+        ))
+        fig.update_layout(
+            title=f"Historique récent + Prévision sur {len(predictions)} jours",
+            xaxis_title="Date", yaxis_title="Quantité demandée",
+            height=500, hovermode="x unified",
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+        # Tableau + stats
+        st.subheader("📋 Détail des prévisions")
+        pred_df = predictions.reset_index()
+        pred_df.columns = ["Date", "Demande prévue"]
+        pred_df["Demande prévue"] = pred_df["Demande prévue"].round(0).astype(int)
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.dataframe(pred_df, use_container_width=True, hide_index=True)
+        with col2:
+            total = int(predictions.sum())
+            avg = float(predictions.mean())
+            max_day = predictions.idxmax().strftime("%Y-%m-%d")
+            max_val = int(predictions.max())
+
+            st.metric("Demande totale prévue", f"{total} unités")
+            st.metric("Moyenne journalière", f"{avg:.1f} unités/jour")
+            st.metric("Pic prévu", f"{max_val} unités", delta=f"le {max_day}")
+
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
             current_stock = int(
                 stock_df.loc[stock_df["product_id"] == last_product, "quantity"].iloc[0]
             )
             if total > current_stock:
+<<<<<<< HEAD
                 st.markdown(
                     render_info_banner(
                         "⚠️",
@@ -880,22 +1216,50 @@ def render_predictions() -> None:
     )
     selected_products = st.multiselect(
         "Selectionne des produits a comparer",
+=======
+                st.error(
+                    f"⚠️ Stock actuel ({current_stock}) insuffisant pour la "
+                    f"demande prévue ({total}). Réapprovisionnement recommandé."
+                )
+            else:
+                st.success(
+                    f"✅ Stock actuel ({current_stock}) suffisant pour la "
+                    f"demande prévue ({total})."
+                )
+
+    # Comparaison multi-produits
+    st.markdown("---")
+    st.subheader("🔬 Comparaison multi-produits")
+
+    selected_products = st.multiselect(
+        "Compare la demande prévue pour plusieurs produits",
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         options=stock_df["product_id"].tolist(),
         max_selections=5,
     )
 
     if selected_products and st.button("Comparer", key="compare_btn"):
+<<<<<<< HEAD
         with st.spinner("Calcul des previsions..."):
+=======
+        with st.spinner("Calcul des prévisions..."):
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
             fig_compare = go.Figure()
             for pid in selected_products:
                 try:
                     preds = engine.predict(
+<<<<<<< HEAD
                         product_id=pid, n_days=horizon,
+=======
+                        product_id=pid,
+                        n_days=horizon,
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
                         history_csv=settings.historique_csv,
                     )
                     fig_compare.add_trace(go.Scatter(
                         x=preds.index, y=preds.values,
                         mode="lines+markers", name=pid,
+<<<<<<< HEAD
                         line=dict(width=2.5, shape="spline"),
                         marker=dict(size=7),
                     ))
@@ -910,6 +1274,16 @@ def render_predictions() -> None:
                 legend=dict(
                     bgcolor="rgba(255,255,255,0.7)", bordercolor="rgba(0,0,0,0.05)", borderwidth=1,
                 ),
+=======
+                    ))
+                except Exception as e:
+                    st.warning(f"Échec prédiction {pid} : {e}")
+
+            fig_compare.update_layout(
+                title="Comparaison des prévisions",
+                xaxis_title="Date", yaxis_title="Demande prévue",
+                height=500, hovermode="x unified",
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
             )
             st.plotly_chart(fig_compare, use_container_width=True)
 
@@ -919,6 +1293,7 @@ def render_predictions() -> None:
 # ============================================================
 
 def render_commandes() -> None:
+<<<<<<< HEAD
     st.markdown(
         render_page_header("Commandes fournisseurs", "Suivi et gestion des commandes"),
         unsafe_allow_html=True,
@@ -926,11 +1301,19 @@ def render_commandes() -> None:
 
     if commandes_df.empty:
         st.warning("Aucune commande a afficher.")
+=======
+    st.title("🚚 Commandes fournisseurs")
+    st.markdown("---")
+
+    if commandes_df.empty:
+        st.warning("Aucune commande à afficher.")
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         return
 
     cmd_df = commandes_df.copy()
     cmd_df["order_date"] = pd.to_datetime(cmd_df["order_date"])
 
+<<<<<<< HEAD
     col1, col2, col3, col4 = st.columns(4, gap="medium")
     with col1:
         st.markdown(
@@ -962,6 +1345,20 @@ def render_commandes() -> None:
 
     with st.expander("🔍 Filtres avances", expanded=False):
         col1, col2 = st.columns(2, gap="medium")
+=======
+    # KPIs
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Total commandes", len(cmd_df))
+    col2.metric("En attente", int((cmd_df["status"] == "pending").sum()))
+    col3.metric("En livraison", int((cmd_df["status"] == "shipped").sum()))
+    col4.metric("Livrées", int((cmd_df["status"] == "delivered").sum()))
+
+    st.markdown("---")
+
+    # Filtres
+    with st.expander("🔍 Filtres", expanded=False):
+        col1, col2 = st.columns(2)
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         with col1:
             statuses = sorted(cmd_df["status"].unique())
             selected_statuses = st.multiselect("Statuts", statuses, default=statuses)
@@ -970,10 +1367,18 @@ def render_commandes() -> None:
             selected_suppliers = st.multiselect("Fournisseurs", suppliers, default=suppliers)
 
         date_range = st.date_input(
+<<<<<<< HEAD
             "Periode",
             value=(cmd_df["order_date"].min().date(), cmd_df["order_date"].max().date()),
         )
 
+=======
+            "Période",
+            value=(cmd_df["order_date"].min().date(), cmd_df["order_date"].max().date()),
+        )
+
+    # Filtrage
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     filtered = cmd_df[
         cmd_df["status"].isin(selected_statuses)
         & cmd_df["supplier_id"].isin(selected_suppliers)
@@ -985,11 +1390,16 @@ def render_commandes() -> None:
             (filtered["order_date"] >= start) & (filtered["order_date"] <= end)
         ]
 
+<<<<<<< HEAD
     st.markdown(
         render_section_header("📋", "Liste des commandes",
                              f"{len(filtered)} resultats filtres"),
         unsafe_allow_html=True,
     )
+=======
+    # Tableau enrichi
+    st.subheader(f"📋 Commandes ({len(filtered)} résultats)")
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     display = filtered.merge(
         fournisseurs_df[["supplier_id", "name"]].rename(columns={"name": "fournisseur"}),
         on="supplier_id", how="left",
@@ -1006,6 +1416,7 @@ def render_commandes() -> None:
         hide_index=True,
     )
 
+<<<<<<< HEAD
     st.markdown(
         render_section_header("➕", "Nouvelle commande",
                              "Passer une commande chez un fournisseur"),
@@ -1013,13 +1424,25 @@ def render_commandes() -> None:
     )
     with st.form("new_commande_form"):
         col1, col2 = st.columns(2, gap="medium")
+=======
+    # Création nouvelle commande
+    st.markdown("---")
+    st.subheader("➕ Nouvelle commande")
+
+    with st.form("new_commande_form"):
+        col1, col2 = st.columns(2)
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         with col1:
             new_product = st.selectbox(
                 "Produit",
                 options=stock_df["product_id"].tolist(),
                 format_func=lambda pid: f"{pid} - {stock_df.loc[stock_df['product_id'] == pid, 'name'].iloc[0]}",
             )
+<<<<<<< HEAD
             new_quantity = st.number_input("Quantite", min_value=1, value=50, step=1)
+=======
+            new_quantity = st.number_input("Quantité", min_value=1, value=50, step=1)
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         with col2:
             new_supplier = st.selectbox(
                 "Fournisseur",
@@ -1028,7 +1451,11 @@ def render_commandes() -> None:
             )
             new_status = st.selectbox("Statut initial", ["pending", "shipped"])
 
+<<<<<<< HEAD
         submit = st.form_submit_button("Creer la commande", type="primary")
+=======
+        submit = st.form_submit_button("Créer la commande", type="primary")
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         if submit:
             try:
                 cmd_id = dm.add_commande(
@@ -1037,11 +1464,16 @@ def render_commandes() -> None:
                     supplier_id=new_supplier,
                     status=new_status,
                 )
+<<<<<<< HEAD
                 st.success(f"✅ Commande {cmd_id} creee avec succes")
+=======
+                st.success(f"✅ Commande {cmd_id} créée avec succès")
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
                 st.rerun()
             except Exception as e:
                 st.error(f"❌ {e}")
 
+<<<<<<< HEAD
     st.markdown(
         render_section_header("📊", "Analyse des commandes",
                              "Patterns et tendances"),
@@ -1049,6 +1481,13 @@ def render_commandes() -> None:
     )
     col1, col2 = st.columns(2, gap="medium")
 
+=======
+    # Visualisations
+    st.markdown("---")
+    st.subheader("📊 Analyse des commandes")
+
+    col1, col2 = st.columns(2)
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     with col1:
         by_supplier = (
             filtered.merge(fournisseurs_df[["supplier_id", "name"]], on="supplier_id")
@@ -1057,6 +1496,7 @@ def render_commandes() -> None:
         )
         fig1 = px.bar(
             by_supplier, x="quantity", y="name", orientation="h",
+<<<<<<< HEAD
             title="Volume par fournisseur",
             color="quantity",
             color_continuous_scale=[[0, "#a7f3d0"], [0.5, "#10b981"], [1, "#059669"]],
@@ -1064,10 +1504,17 @@ def render_commandes() -> None:
         fig1 = apply_plotly_theme(fig1)
         fig1.update_traces(marker_line_width=0, marker_cornerradius=5)
         fig1.update_layout(height=420, showlegend=False, coloraxis_showscale=False)
+=======
+            title="Volume commandé par fournisseur",
+            labels={"name": "Fournisseur", "quantity": "Unités"},
+        )
+        fig1.update_layout(height=400)
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         st.plotly_chart(fig1, use_container_width=True)
 
     with col2:
         daily = filtered.groupby("order_date")["quantity"].sum().reset_index()
+<<<<<<< HEAD
         fig2 = go.Figure()
         fig2.add_trace(go.Scatter(
             x=daily["order_date"], y=daily["quantity"],
@@ -1083,6 +1530,14 @@ def render_commandes() -> None:
             xaxis_title="Date", yaxis_title="Unites",
             height=420, showlegend=False,
         )
+=======
+        fig2 = px.line(
+            daily, x="order_date", y="quantity",
+            title="Volume commandé dans le temps",
+            labels={"order_date": "Date", "quantity": "Unités"},
+        )
+        fig2.update_layout(height=400)
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         st.plotly_chart(fig2, use_container_width=True)
 
 
@@ -1090,6 +1545,7 @@ def render_commandes() -> None:
 # PAGE 5 : Robot (placeholder)
 # ============================================================
 
+<<<<<<< HEAD
 @st.cache_resource
 def get_robot_client() -> RobotClient:
     return RobotClient(host=settings.pi_host, port=settings.pi_port)
@@ -1534,6 +1990,54 @@ def render_emplacements() -> None:
 
 # ============================================================
 # Routeur
+=======
+def render_robot() -> None:
+    st.title("🤖 Robot d'entrepôt")
+    st.markdown("---")
+
+    st.info(
+        "🚧 **Module en cours de développement**\n\n"
+        "Cette page affichera :\n"
+        "- L'état temps réel du robot (position, batterie, charge)\n"
+        "- Les missions en cours et en attente\n"
+        "- Les commandes manuelles (déplacement, retour à la base)\n"
+        "- L'historique des actions exécutées\n\n"
+        "Le module `robot/` est en développement par un autre membre du groupe."
+    )
+
+    st.markdown("---")
+    st.subheader("Aperçu visuel (données simulées)")
+
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("État", "🟢 Inactif")
+    col2.metric("Batterie", "87%", delta="-3%")
+    col3.metric("Position", "(0, 0)")
+    col4.metric("Missions terminées", "0")
+
+    st.markdown("---")
+    st.subheader("Missions en attente (mock)")
+    st.dataframe(
+        {
+            "ID": ["M00001", "M00002", "M00003"],
+            "Type": ["Réapprovisionnement", "Picking", "Réapprovisionnement"],
+            "Produit": ["P003", "P012", "P018"],
+            "Quantité": [50, 10, 30],
+            "Priorité": [2, 4, 5],
+            "Statut": ["⏳ En attente", "⏳ En attente", "⏳ En attente"],
+        },
+        use_container_width=True,
+        hide_index=True,
+    )
+
+    st.caption(
+        "💡 Quand le module robot sera intégré, ces données proviendront du "
+        "`MissionManager` et du `RobotController` en temps réel."
+    )
+
+
+# ============================================================
+# Routeur : appelle la fonction de la page sélectionnée
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 # ============================================================
 
 if page == "🏠 Vue d'ensemble":
@@ -1542,8 +2046,11 @@ elif page == "📦 Stock":
     render_stock()
 elif page == "📈 Prédictions":
     render_predictions()
+<<<<<<< HEAD
 elif page == "📍 Emplacements":
     render_emplacements()
+=======
+>>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 elif page == "🚚 Commandes":
     render_commandes()
 elif page == "🤖 Robot":
