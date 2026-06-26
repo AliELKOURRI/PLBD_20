@@ -136,6 +136,10 @@ def apply_plotly_theme(fig: go.Figure) -> go.Figure:
 dm = get_data_manager()
 engine = get_prediction_engine()
 
+if not settings.stock_csv.exists():
+    from helpers.generate_data import main as generate_data
+    generate_data()
+
 try:
     stock_df = dm.read_stock()
     commandes_df = dm.read_commandes()

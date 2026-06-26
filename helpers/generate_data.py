@@ -29,16 +29,19 @@ logger = logging.getLogger(__name__)
 
 # ============ Paramètres modifiables ============
 
-NUM_PRODUCTS = 30           # Nombre de produits à générer
+NUM_PRODUCTS = 4            # Nombre de produits à générer
 NUM_SUPPLIERS = 5           # Nombre de fournisseurs
 HISTORY_DAYS = 365          # Jours d'historique de demande
-NUM_PAST_COMMANDES = 80     # Nombre de commandes passées à générer
+NUM_PAST_COMMANDES = 20     # Nombre de commandes passées à générer
 
 # Catégories de produits
-CATEGORIES = ["Électronique", "Alimentaire", "Textile", "Outillage", "Bureautique"]
+CATEGORIES = ["Électronique"]
+
+# Couleur associée à chaque produit (pour l'UI et le robot)
+PRODUCT_COLORS = ["Jaune", "Bleu", "Marron", "Noir"]
 
 # Localisations dans l'entrepôt (allée-rangée)
-LOCATIONS = [f"A{i}-R{j}" for i in range(1, 6) for j in range(1, 7)]
+LOCATIONS = [f"A{i}-R{j}" for i in range(1, 5) for j in range(1, 4)]
 
 # Seed pour la reproductibilité (mêmes données à chaque génération)
 RANDOM_SEED = 42
@@ -65,26 +68,21 @@ def generate_fournisseurs(n: int, rng: np.random.Generator) -> pd.DataFrame:
 
 
 def generate_stock(n: int, rng: np.random.Generator) -> pd.DataFrame:
-    """Génère le CSV de stock initial."""
-    product_names = [
-        "Câble USB", "Clavier", "Souris", "Écran 24''", "Disque SSD",
-        "Riz 5kg", "Huile olive", "Sucre 1kg", "Café 250g", "Pâtes 500g",
-        "T-shirt M", "Jean", "Veste cuir", "Chaussettes", "Casquette",
-        "Marteau", "Tournevis", "Perceuse", "Mètre ruban", "Clé anglaise",
-        "Cahier A4", "Stylo bille", "Agrafeuse", "Ciseaux", "Calculatrice",
-        "Tablette", "Chargeur", "Casque audio", "Webcam", "Imprimante",
-    ]
+    """Génère le CSV de stock initial (4 produits avec couleurs)."""
+    product_names = ["Câble USB", "Clavier", "Souris", "Écran 24''"]
     products = []
     for i in range(n):
         category = CATEGORIES[i % len(CATEGORIES)]
         name = product_names[i] if i < len(product_names) else f"Produit-{i+1}"
+        color = PRODUCT_COLORS[i] if i < len(PRODUCT_COLORS) else "Noir"
         products.append({
             "product_id": f"P{i+1:03d}",
             "name": name,
             "category": category,
             "quantity": int(rng.integers(20, 200)),
             "min_threshold": int(rng.integers(10, 30)),
-            "location": rng.choice(LOCATIONS),
+            "location": f"A{i+1}-R1",
+            "color": color,
         })
     return pd.DataFrame(products)
 
