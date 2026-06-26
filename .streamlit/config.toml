@@ -6,7 +6,7 @@ textColor = "#2D3436"
 font = "sans serif"
 
 [server]
-headless = false
+headless = true
 runOnSave = true
 
 [browser]
