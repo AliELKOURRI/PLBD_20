@@ -1,11 +1,12 @@
 """
 Styles CSS custom pour le dashboard Smart Predict AI.
 
-Injecte des styles modernes via st.markdown(unsafe_allow_html=True) pour
-transformer l'apparence par défaut de Streamlit en un dashboard SaaS pro.
-
-Palette : teal/vert (industriel, durable, moderne).
-Police : Inter (Google Font).
+Design system inspire de Shine :
+- Fond clair lumineux avec blobs organiques colores
+- Sidebar blanche epuree
+- Accent indigo/violet pour les CTA
+- Coins tres arrondis, ombres douces
+- Typographie Inter bold et aérée
 """
 
 from __future__ import annotations
@@ -18,55 +19,121 @@ CUSTOM_CSS = """
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    --primary: #10b981;
-    --primary-dark: #059669;
-    --primary-light: #34d399;
-    --teal: #0ea5e9;
-    --gradient-main: linear-gradient(135deg, #0ea5e9 0%, #10b981 100%);
-    --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-    --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    --gradient-purple: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
-    --gradient-pink: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+    --primary: #6C5CE7;
+    --primary-dark: #5A4BD1;
+    --primary-light: #A29BFE;
+    --accent-teal: #00D2D3;
+    --accent-yellow: #FECA57;
+    --accent-blue: #54A0FF;
+    --accent-green: #10b981;
+    --gradient-primary: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%);
+    --gradient-teal: linear-gradient(135deg, #00D2D3 0%, #55E6C1 100%);
+    --gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    --gradient-warning: linear-gradient(135deg, #FECA57 0%, #F39C12 100%);
+    --gradient-danger: linear-gradient(135deg, #FF6B6B 0%, #EE5A24 100%);
+    --gradient-blue: linear-gradient(135deg, #54A0FF 0%, #2E86DE 100%);
+    --bg-page: #F5F7FF;
     --bg-card: #ffffff;
-    --bg-soft: #f1f5f9;
-    --border-soft: #e2e8f0;
-    --text-primary: #0f172a;
-    --text-secondary: #64748b;
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --bg-soft: #F0F3FF;
+    --border-soft: rgba(108, 92, 231, 0.08);
+    --text-primary: #2D3436;
+    --text-secondary: #636E72;
+    --text-muted: #B2BEC3;
+    --shadow-card: 0 2px 8px rgba(108, 92, 231, 0.06), 0 8px 24px rgba(108, 92, 231, 0.04);
+    --shadow-card-hover: 0 8px 32px rgba(108, 92, 231, 0.12), 0 2px 8px rgba(108, 92, 231, 0.06);
+    --shadow-button: 0 4px 16px rgba(108, 92, 231, 0.3);
+    --radius-sm: 0.75rem;
+    --radius-md: 1rem;
+    --radius-lg: 1.5rem;
+    --radius-xl: 2rem;
+    --radius-full: 999px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 html, body, [class*="css"] {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    -webkit-font-smoothing: antialiased !important;
+}
+
+/* ============================================================
+   PAGE BACKGROUND — Light with colorful blobs
+   ============================================================ */
+
+[data-testid="stAppViewContainer"] {
+    background: var(--bg-page);
+    position: relative;
+}
+
+[data-testid="stAppViewContainer"]::before {
+    content: '';
+    position: fixed;
+    top: -120px;
+    left: -120px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0, 210, 211, 0.18) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: blobFloat1 18s ease-in-out infinite;
+}
+
+[data-testid="stAppViewContainer"]::after {
+    content: '';
+    position: fixed;
+    bottom: -100px;
+    right: -100px;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(254, 202, 87, 0.2) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+    animation: blobFloat2 20s ease-in-out infinite;
+}
+
+@keyframes blobFloat1 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, 30px) scale(1.05); }
+    66% { transform: translate(-20px, 50px) scale(0.95); }
+}
+
+@keyframes blobFloat2 {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-30px, -40px) scale(1.08); }
+    66% { transform: translate(20px, -20px) scale(0.92); }
 }
 
 .main .block-container {
-    padding-top: 2rem;
-    padding-bottom: 3rem;
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
     max-width: 1400px;
+    position: relative;
+    z-index: 1;
 }
 
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
-header {visibility: hidden;}
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
 
 h1 {
     font-weight: 800 !important;
-    letter-spacing: -0.025em !important;
-    background: var(--gradient-main);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    letter-spacing: -0.035em !important;
+    color: var(--text-primary) !important;
+    -webkit-text-fill-color: var(--text-primary) !important;
+    background: none !important;
     margin-bottom: 0.5rem !important;
+    line-height: 1.1 !important;
 }
 
 h2 {
     font-weight: 700 !important;
     color: var(--text-primary) !important;
-    letter-spacing: -0.02em !important;
+    letter-spacing: -0.025em !important;
 }
 
 h3 {
@@ -74,220 +141,282 @@ h3 {
     color: var(--text-primary) !important;
 }
 
+/* ============================================================
+   SIDEBAR — Clean white
+   ============================================================ */
+
 section[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
-    border-right: 1px solid #334155;
+    background: #ffffff !important;
+    border-right: 1px solid rgba(108, 92, 231, 0.06) !important;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.03);
 }
 
 section[data-testid="stSidebar"] * {
-    color: #e2e8f0 !important;
+    color: var(--text-primary) !important;
 }
 
 section[data-testid="stSidebar"] h1 {
-    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 1.75rem !important;
+    color: var(--primary) !important;
+    -webkit-text-fill-color: var(--primary) !important;
+    font-size: 1.6rem !important;
     margin-bottom: 0 !important;
 }
 
 section[data-testid="stSidebar"] hr {
-    border-color: #334155 !important;
-    margin: 1rem 0 !important;
+    border-color: rgba(108, 92, 231, 0.06) !important;
+    margin: 1.25rem 0 !important;
 }
 
 section[data-testid="stSidebar"] .stRadio > div {
-    gap: 0.5rem !important;
+    gap: 0.375rem !important;
 }
 
 section[data-testid="stSidebar"] label[data-baseweb="radio"] {
     padding: 0.75rem 1rem !important;
-    border-radius: 0.75rem !important;
-    transition: all 0.2s ease !important;
+    border-radius: var(--radius-md) !important;
+    transition: all var(--transition) !important;
     cursor: pointer !important;
+    border: 1px solid transparent !important;
 }
 
 section[data-testid="stSidebar"] label[data-baseweb="radio"]:hover {
-    background: rgba(16, 185, 129, 0.1) !important;
+    background: var(--bg-soft) !important;
+    border-color: rgba(108, 92, 231, 0.1) !important;
     transform: translateX(4px) !important;
 }
 
-[data-testid="stMetric"] {
-    background: var(--bg-card);
-    padding: 1.5rem !important;
-    border-radius: 1rem !important;
-    border: 1px solid var(--border-soft);
-    box-shadow: var(--shadow-md);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-[data-testid="stMetric"]::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--gradient-main);
-}
-
-[data-testid="stMetric"]:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-xl);
-    border-color: var(--primary);
-}
-
-[data-testid="stMetric"] label {
-    color: var(--text-secondary) !important;
-    font-weight: 500 !important;
-    font-size: 0.875rem !important;
-    letter-spacing: 0.025em !important;
-}
-
-[data-testid="stMetric"] [data-testid="stMetricValue"] {
-    font-size: 2.25rem !important;
-    font-weight: 800 !important;
-    color: var(--text-primary) !important;
-    background: var(--gradient-main);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-[data-testid="stMetric"] [data-testid="stMetricDelta"] {
-    font-weight: 600 !important;
-    font-size: 0.875rem !important;
-}
+/* ============================================================
+   BUTTONS — Indigo/violet like Shine
+   ============================================================ */
 
 .stButton > button {
-    border-radius: 0.75rem !important;
-    font-weight: 600 !important;
-    padding: 0.625rem 1.25rem !important;
-    transition: all 0.2s ease !important;
+    border-radius: var(--radius-full) !important;
+    font-weight: 700 !important;
+    padding: 0.7rem 2rem !important;
+    transition: all var(--transition-spring) !important;
     border: none !important;
-    box-shadow: var(--shadow-sm);
+    letter-spacing: 0.01em !important;
+    font-size: 0.95rem !important;
 }
 
 .stButton > button[kind="primary"] {
-    background: var(--gradient-main) !important;
+    background: var(--gradient-primary) !important;
     color: white !important;
+    box-shadow: var(--shadow-button) !important;
 }
 
 .stButton > button[kind="primary"]:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.5) !important;
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 8px 28px rgba(108, 92, 231, 0.4) !important;
 }
 
 .stButton > button[kind="secondary"] {
     background: white !important;
-    color: var(--text-primary) !important;
-    border: 1px solid var(--border-soft) !important;
+    color: var(--primary) !important;
+    border: 2px solid rgba(108, 92, 231, 0.2) !important;
+    box-shadow: none !important;
 }
 
 .stButton > button[kind="secondary"]:hover {
     border-color: var(--primary) !important;
-    color: var(--primary) !important;
+    background: var(--bg-soft) !important;
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.1) !important;
 }
+
+/* ============================================================
+   FORM INPUTS
+   ============================================================ */
 
 .stSelectbox > div > div,
 .stMultiSelect > div > div,
 .stTextInput > div > div,
 .stNumberInput > div > div {
-    border-radius: 0.75rem !important;
-    border: 1px solid var(--border-soft) !important;
-    transition: all 0.2s ease !important;
+    border-radius: var(--radius-md) !important;
+    border: 2px solid rgba(108, 92, 231, 0.08) !important;
+    transition: all var(--transition) !important;
+    background: white !important;
 }
 
 .stSelectbox > div > div:focus-within,
 .stTextInput > div > div:focus-within,
 .stNumberInput > div > div:focus-within {
     border-color: var(--primary) !important;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+    box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.08) !important;
 }
 
-[data-testid="stDataFrame"] {
-    border-radius: 1rem !important;
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-soft);
+/* ============================================================
+   METRIC CARDS
+   ============================================================ */
+
+[data-testid="stMetric"] {
+    background: white;
+    padding: 1.5rem !important;
+    border-radius: var(--radius-lg) !important;
+    border: 1px solid rgba(108, 92, 231, 0.06);
+    box-shadow: var(--shadow-card);
+    transition: all var(--transition-spring);
 }
+
+[data-testid="stMetric"]::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+[data-testid="stMetric"]:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+[data-testid="stMetric"] label {
+    color: var(--text-secondary) !important;
+    font-weight: 600 !important;
+    font-size: 0.8rem !important;
+    letter-spacing: 0.04em !important;
+    text-transform: uppercase;
+}
+
+[data-testid="stMetric"] [data-testid="stMetricValue"] {
+    font-size: 2rem !important;
+    font-weight: 800 !important;
+    color: var(--text-primary) !important;
+}
+
+/* ============================================================
+   DATA FRAMES
+   ============================================================ */
+
+[data-testid="stDataFrame"] {
+    border-radius: var(--radius-lg) !important;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(108, 92, 231, 0.06);
+    background: white;
+}
+
+/* ============================================================
+   EXPANDERS
+   ============================================================ */
 
 .streamlit-expanderHeader {
     background: var(--bg-soft) !important;
-    border-radius: 0.75rem !important;
+    border-radius: var(--radius-md) !important;
     font-weight: 600 !important;
-    transition: all 0.2s ease !important;
+    transition: all var(--transition) !important;
+    border: 1px solid rgba(108, 92, 231, 0.06) !important;
 }
 
 .streamlit-expanderHeader:hover {
-    background: #e0f2fe !important;
+    background: rgba(108, 92, 231, 0.06) !important;
+    border-color: rgba(108, 92, 231, 0.12) !important;
 }
+
+/* ============================================================
+   ALERTS
+   ============================================================ */
 
 .stAlert {
-    border-radius: 1rem !important;
+    border-radius: var(--radius-lg) !important;
     border: none !important;
     padding: 1rem 1.25rem !important;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
+
+/* ============================================================
+   PLOTLY CHARTS
+   ============================================================ */
 
 .stPlotlyChart {
-    background: var(--bg-card);
-    border-radius: 1rem;
-    padding: 1rem;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-soft);
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-card);
+    border: 1px solid rgba(108, 92, 231, 0.06);
+    transition: all var(--transition);
 }
+
+.stPlotlyChart:hover {
+    box-shadow: var(--shadow-card-hover);
+}
+
+/* ============================================================
+   FORMS
+   ============================================================ */
 
 [data-testid="stForm"] {
-    background: var(--bg-card);
-    padding: 1.5rem !important;
-    border-radius: 1rem !important;
-    border: 1px solid var(--border-soft);
-    box-shadow: var(--shadow-sm);
+    background: white;
+    padding: 1.75rem !important;
+    border-radius: var(--radius-xl) !important;
+    border: 1px solid rgba(108, 92, 231, 0.06);
+    box-shadow: var(--shadow-card);
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* ============================================================
+   TABS
+   ============================================================ */
+
+.stTabs [data-baseweb="tab-list"] {
+    gap: 0.375rem;
+    background: var(--bg-soft);
+    padding: 0.3rem;
+    border-radius: var(--radius-full);
 }
 
-.main .block-container > div {
-    animation: fadeInUp 0.5s ease-out;
+.stTabs [data-baseweb="tab"] {
+    border-radius: var(--radius-full) !important;
+    padding: 0.5rem 1.25rem !important;
+    font-weight: 600 !important;
+    transition: all var(--transition) !important;
 }
+
+.stTabs [aria-selected="true"] {
+    background: var(--gradient-primary) !important;
+    color: white !important;
+    box-shadow: 0 2px 8px rgba(108, 92, 231, 0.3) !important;
+}
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(108, 92, 231, 0.15); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(108, 92, 231, 0.3); }
+
+/* ============================================================
+   DIVIDERS / SPINNER / ANIMATIONS
+   ============================================================ */
 
 hr {
     margin: 2rem 0 !important;
     border: none !important;
     height: 1px !important;
-    background: linear-gradient(90deg, transparent, var(--border-soft), transparent) !important;
+    background: linear-gradient(90deg, transparent, rgba(108, 92, 231, 0.1), transparent) !important;
 }
 
-.stTabs [data-baseweb="tab-list"] {
-    gap: 0.5rem;
+.stSpinner > div { border-top-color: var(--primary) !important; }
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.stTabs [data-baseweb="tab"] {
-    border-radius: 0.75rem !important;
-    padding: 0.5rem 1.25rem !important;
-    font-weight: 500 !important;
+.main .block-container > div {
+    animation: fadeInUp 0.4s ease-out;
 }
 
-.stTabs [aria-selected="true"] {
-    background: var(--gradient-main) !important;
-    color: white !important;
+.stRadio > div[role="radiogroup"] > label {
+    border-radius: var(--radius-full) !important;
+    padding: 0.5rem 1rem !important;
+    transition: all var(--transition) !important;
 }
 
-.stSpinner > div {
-    border-top-color: var(--primary) !important;
+.stRadio > div[role="radiogroup"] > label:hover {
+    background: var(--bg-soft);
 }
 </style>
 """
@@ -295,12 +424,8 @@ hr {
 
 SPLASH_CSS = """
 <style>
-/* Cache la sidebar pendant le splash */
-section[data-testid="stSidebar"] {
-    display: none !important;
-}
+section[data-testid="stSidebar"] { display: none !important; }
 
-/* Le main container doit pouvoir contenir le bouton par-dessus le splash */
 .main .block-container {
     max-width: 100% !important;
     padding: 0 !important;
@@ -310,120 +435,77 @@ section[data-testid="stSidebar"] {
 
 [data-testid="stAppViewContainer"] {
     position: relative !important;
+    background: transparent !important;
 }
 
-/* Le splash en arrière-plan */
+[data-testid="stAppViewContainer"]::before,
+[data-testid="stAppViewContainer"]::after { display: none !important; }
+
 .splash-container {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(135deg, #0f172a 0%, #064e3b 50%, #0f172a 100%);
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: linear-gradient(160deg, #F5F7FF 0%, #EDE8FF 40%, #F5F7FF 100%);
     overflow: hidden;
     z-index: 1;
     pointer-events: none;
 }
 
+/* Blob turquoise */
+.splash-container::before {
+    content: '';
+    position: absolute;
+    top: -15%; left: -10%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0, 210, 211, 0.25) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: blobFloat1 18s ease-in-out infinite;
+    z-index: 1;
+}
+
+/* Blob jaune */
+.splash-container::after {
+    content: '';
+    position: absolute;
+    bottom: -15%; right: -10%;
+    width: 550px; height: 550px;
+    background: radial-gradient(circle, rgba(254, 202, 87, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: blobFloat2 20s ease-in-out infinite;
+    z-index: 1;
+}
+
 .particles {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     overflow: hidden;
-    z-index: 1;
+    z-index: 2;
 }
 
 .particle {
     position: absolute;
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.6) 0%, rgba(16, 185, 129, 0) 70%);
     border-radius: 50%;
-    animation: float 15s infinite ease-in-out;
+    animation: float 18s infinite ease-in-out;
 }
 
-.particle:nth-child(1) { width: 200px; height: 200px; top: 10%; left: 10%; animation-delay: 0s; }
-.particle:nth-child(2) { width: 150px; height: 150px; top: 60%; left: 80%; animation-delay: -2s; }
-.particle:nth-child(3) { width: 100px; height: 100px; top: 30%; left: 70%; animation-delay: -4s; }
-.particle:nth-child(4) { width: 250px; height: 250px; top: 70%; left: 20%; animation-delay: -6s; }
-.particle:nth-child(5) { width: 180px; height: 180px; top: 20%; left: 50%; animation-delay: -8s; }
-.particle:nth-child(6) { width: 120px; height: 120px; top: 80%; left: 60%; animation-delay: -10s; }
-.particle:nth-child(7) { width: 90px; height: 90px; top: 50%; left: 5%; animation-delay: -12s; }
-.particle:nth-child(8) { width: 160px; height: 160px; top: 40%; left: 90%; animation-delay: -14s; }
+.particle:nth-child(1) { width: 14px; height: 14px; top: 20%; left: 15%; background: #00D2D3; animation-delay: 0s; }
+.particle:nth-child(2) { width: 10px; height: 10px; top: 55%; left: 80%; background: #6C5CE7; animation-delay: -3s; }
+.particle:nth-child(3) { width: 18px; height: 18px; top: 30%; left: 65%; background: #FECA57; animation-delay: -5s; }
+.particle:nth-child(4) { width: 8px; height: 8px; top: 70%; left: 25%; background: #54A0FF; animation-delay: -7s; }
+.particle:nth-child(5) { width: 12px; height: 12px; top: 15%; left: 50%; background: #FF6B6B; animation-delay: -9s; }
+.particle:nth-child(6) { width: 16px; height: 16px; top: 75%; left: 60%; background: #00D2D3; animation-delay: -11s; }
+.particle:nth-child(7) { width: 10px; height: 10px; top: 45%; left: 8%; background: #FECA57; animation-delay: -13s; }
+.particle:nth-child(8) { width: 14px; height: 14px; top: 35%; left: 88%; background: #6C5CE7; animation-delay: -15s; }
 
 @keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
-    25% { transform: translate(50px, -80px) scale(1.1); opacity: 0.6; }
-    50% { transform: translate(-30px, -120px) scale(0.9); opacity: 0.3; }
-    75% { transform: translate(-80px, -50px) scale(1.05); opacity: 0.5; }
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+    25% { transform: translate(30px, -40px) scale(1.2); opacity: 1; }
+    50% { transform: translate(-20px, -70px) scale(0.8); opacity: 0.5; }
+    75% { transform: translate(-40px, -30px) scale(1.1); opacity: 0.9; }
 }
 
-.geo-decor {
-    position: absolute;
-    border: 2px solid rgba(16, 185, 129, 0.3);
-    border-radius: 50%;
-}
-
-.geo-decor.circle-1 {
-    width: 600px;
-    height: 600px;
-    top: -200px;
-    right: -200px;
-    border-style: dashed;
-    animation: rotate 30s linear infinite;
-}
-
-.geo-decor.circle-2 {
-    width: 400px;
-    height: 400px;
-    bottom: -150px;
-    left: -150px;
-    border-color: rgba(14, 165, 233, 0.3);
-    animation: rotate 25s linear infinite reverse;
-}
-
-.geo-decor.circle-3 {
-    width: 300px;
-    height: 300px;
-    top: 50%;
-    left: 50%;
-    border-color: rgba(52, 211, 153, 0.15);
-    animation: rotate-center 40s linear infinite;
-}
-
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes rotate-center {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-.geo-line {
-    position: absolute;
-    background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.4), transparent);
-    height: 2px;
-    animation: pulse-line 4s infinite ease-in-out;
-}
-
-.geo-line.line-1 {
-    width: 300px;
-    top: 25%;
-    left: 0;
-    animation-delay: 0s;
-}
-
-.geo-line.line-2 {
-    width: 250px;
-    bottom: 30%;
-    right: 0;
-    animation-delay: -2s;
-}
-
-@keyframes pulse-line {
-    0%, 100% { opacity: 0.2; transform: scaleX(1); }
-    50% { opacity: 0.7; transform: scaleX(1.2); }
-}
+.geo-decor { display: none; }
+.geo-line { display: none; }
 
 .splash-content {
     position: relative;
@@ -436,166 +518,180 @@ section[data-testid="stSidebar"] {
     padding: 2rem;
     padding-bottom: 8rem;
     text-align: center;
-    color: white;
-    animation: fadeInScale 1s ease-out;
+    animation: fadeInScale 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes fadeInScale {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+    from { opacity: 0; transform: scale(0.96) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .splash-logo-wrapper {
     position: relative;
-    width: 180px;
-    height: 180px;
+    width: 140px; height: 140px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 2rem;
-    animation: floatLogo 3s infinite ease-in-out;
+    animation: floatLogo 4s infinite ease-in-out;
 }
 
 @keyframes floatLogo {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+    50% { transform: translateY(-12px); }
 }
 
 .splash-logo-aura {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.5) 0%, transparent 70%);
+    width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(108, 92, 231, 0.15) 0%, transparent 70%);
     border-radius: 50%;
-    animation: pulse-aura 2s infinite ease-in-out;
+    animation: pulse-aura 3s infinite ease-in-out;
 }
 
 @keyframes pulse-aura {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.3); opacity: 0.8; }
+    0%, 100% { transform: scale(1); opacity: 0.4; }
+    50% { transform: scale(1.3); opacity: 0.7; }
+}
+
+.splash-logo-ring {
+    position: absolute;
+    width: 130%; height: 130%;
+    border: 2px solid rgba(108, 92, 231, 0.15);
+    border-radius: 50%;
+    animation: rotate 12s linear infinite;
+}
+
+.splash-logo-ring::before {
+    content: '';
+    position: absolute;
+    top: -4px; left: 50%;
+    width: 8px; height: 8px;
+    background: #6C5CE7;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(108, 92, 231, 0.6);
+}
+
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .splash-logo-emoji {
     position: relative;
-    font-size: 6rem;
-    filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.6));
+    font-size: 4.5rem;
+    filter: drop-shadow(0 4px 20px rgba(108, 92, 231, 0.3));
     z-index: 2;
 }
 
 .splash-title {
     font-size: 4rem;
     font-weight: 900;
-    letter-spacing: -0.03em;
-    margin: 0 0 1rem 0;
-    background: linear-gradient(135deg, #34d399 0%, #0ea5e9 50%, #34d399 100%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: shimmer 3s linear infinite;
-}
-
-@keyframes shimmer {
-    to { background-position: 200% center; }
+    letter-spacing: -0.04em;
+    margin: 0 0 0.75rem 0;
+    color: #2D3436;
+    line-height: 1.05;
 }
 
 .splash-subtitle {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 400;
-    color: #cbd5e1;
+    color: #636E72;
     margin: 0 0 0.5rem 0;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.01em;
 }
 
 .splash-tagline {
-    display: inline-block;
-    font-size: 0.9rem;
-    color: #10b981;
-    font-weight: 600;
-    letter-spacing: 0.2em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: #6C5CE7;
+    font-weight: 700;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    margin: 0 0 3rem 0;
-    padding: 0.5rem 1.5rem;
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    margin: 0 0 2.5rem 0;
+    padding: 0.5rem 1.75rem;
+    border: 2px solid rgba(108, 92, 231, 0.15);
     border-radius: 999px;
-    background: rgba(16, 185, 129, 0.05);
-    backdrop-filter: blur(10px);
+    background: rgba(108, 92, 231, 0.04);
 }
 
 .splash-team {
-    margin: 2rem 0;
-    padding: 2rem 3rem;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 1.5rem;
+    margin: 1.5rem 0;
+    padding: 2.5rem 3rem;
+    background: white;
+    border: 1px solid rgba(108, 92, 231, 0.08);
+    border-radius: 2rem;
     max-width: 700px;
     width: 90%;
+    box-shadow: 0 4px 24px rgba(108, 92, 231, 0.06);
 }
 
 .splash-team-label {
-    font-size: 0.75rem;
-    color: #94a3b8;
-    letter-spacing: 0.2em;
+    font-size: 0.7rem;
+    color: #B2BEC3;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 1rem;
+    font-weight: 700;
+    margin-bottom: 1.25rem;
 }
 
 .splash-team-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 0.75rem;
-    margin-bottom: 1.5rem;
+    gap: 0.625rem;
+    margin-bottom: 1.75rem;
 }
 
 .splash-team-member {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(14, 165, 233, 0.15) 100%);
-    border: 1px solid rgba(16, 185, 129, 0.3);
-    color: #e2e8f0;
+    background: var(--bg-soft);
+    border: 1px solid rgba(108, 92, 231, 0.08);
+    color: #2D3436;
     padding: 0.5rem 1.25rem;
     border-radius: 999px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .splash-team-member:hover {
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(14, 165, 233, 0.3) 100%);
-    transform: translateY(-2px);
+    background: rgba(108, 92, 231, 0.08);
+    border-color: rgba(108, 92, 231, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(108, 92, 231, 0.1);
 }
 
 .splash-supervisor {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(108, 92, 231, 0.06);
 }
 
 .splash-supervisor-label {
-    font-size: 0.75rem;
-    color: #94a3b8;
-    letter-spacing: 0.2em;
+    font-size: 0.7rem;
+    color: #B2BEC3;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
-    font-weight: 600;
+    font-weight: 700;
     margin-bottom: 0.5rem;
 }
 
 .splash-supervisor-name {
-    font-size: 1.125rem;
-    color: #34d399;
-    font-weight: 600;
+    font-size: 1.1rem;
+    color: #6C5CE7;
+    font-weight: 700;
 }
 
 .splash-school {
-    margin-top: 0.75rem;
-    font-size: 0.875rem;
-    color: #94a3b8;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #B2BEC3;
+    letter-spacing: 0.03em;
 }
 
-/* ============ Bouton Commencer (mode splash) ============ */
-
-/* Le conteneur principal du bouton est positionné en bas, au-dessus du splash */
+/* CTA Button */
 .main .block-container {
     display: flex !important;
     flex-direction: column !important;
@@ -604,7 +700,6 @@ section[data-testid="stSidebar"] {
     padding-bottom: 60px !important;
 }
 
-/* Le bouton lui-même : centré horizontalement avec gradient et animation */
 .stButton {
     display: flex !important;
     justify-content: center !important;
@@ -613,25 +708,24 @@ section[data-testid="stSidebar"] {
 }
 
 .stButton > button {
-    background: linear-gradient(135deg, #10b981 0%, #0ea5e9 100%) !important;
+    background: linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%) !important;
     color: white !important;
-    font-size: 1.125rem !important;
+    font-size: 1.05rem !important;
     font-weight: 700 !important;
     padding: 1rem 3rem !important;
     border-radius: 999px !important;
     border: none !important;
-    box-shadow: 0 10px 40px -10px rgba(16, 185, 129, 0.6) !important;
-    letter-spacing: 0.05em !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 8px 28px rgba(108, 92, 231, 0.35) !important;
+    letter-spacing: 0.06em !important;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
     text-transform: uppercase !important;
     cursor: pointer !important;
-    white-space: nowrap !important;
-    min-width: 250px !important;
+    min-width: 260px !important;
 }
 
 .stButton > button:hover {
-    transform: translateY(-3px) scale(1.05) !important;
-    box-shadow: 0 20px 50px -10px rgba(16, 185, 129, 0.8) !important;
+    transform: translateY(-3px) scale(1.03) !important;
+    box-shadow: 0 14px 40px rgba(108, 92, 231, 0.45) !important;
 }
 </style>
 """
@@ -644,87 +738,71 @@ def render_kpi_card(
     sublabel: str = "",
     gradient: str = "main",
 ) -> str:
-    """Génère le HTML d'une KPI card custom avec gradient, icône, et hover."""
     gradients = {
-        "main": "linear-gradient(135deg, #0ea5e9 0%, #10b981 100%)",
-        "success": "linear-gradient(135deg, #10b981 0%, #059669 100%)",
-        "warning": "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
-        "danger": "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
-        "purple": "linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%)",
-        "pink": "linear-gradient(135deg, #ec4899 0%, #db2777 100%)",
+        "main": ("linear-gradient(135deg, #6C5CE7 0%, #A29BFE 100%)",
+                 "rgba(108, 92, 231, 0.3)"),
+        "success": ("linear-gradient(135deg, #10b981 0%, #34d399 100%)",
+                    "rgba(16, 185, 129, 0.3)"),
+        "warning": ("linear-gradient(135deg, #FECA57 0%, #F39C12 100%)",
+                    "rgba(254, 202, 87, 0.3)"),
+        "danger": ("linear-gradient(135deg, #FF6B6B 0%, #EE5A24 100%)",
+                   "rgba(255, 107, 107, 0.3)"),
+        "purple": ("linear-gradient(135deg, #6C5CE7 0%, #8B5CF6 100%)",
+                   "rgba(108, 92, 231, 0.3)"),
+        "pink": ("linear-gradient(135deg, #FD79A8 0%, #E84393 100%)",
+                 "rgba(253, 121, 168, 0.3)"),
+        "teal": ("linear-gradient(135deg, #00D2D3 0%, #55E6C1 100%)",
+                 "rgba(0, 210, 211, 0.3)"),
+        "blue": ("linear-gradient(135deg, #54A0FF 0%, #2E86DE 100%)",
+                 "rgba(84, 160, 255, 0.3)"),
     }
-    bg = gradients.get(gradient, gradients["main"])
+    bg, glow = gradients.get(gradient, gradients["main"])
 
-    return f"""
-    <div style="
-        background: {bg};
-        padding: 1.75rem;
-        border-radius: 1.25rem;
-        color: white;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        cursor: default;
-    " onmouseover="this.style.transform='translateY(-6px)'; this.style.boxShadow='0 20px 40px -10px rgba(0,0,0,0.3)'"
-       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 25px -5px rgba(0,0,0,0.15)'">
-        <div style="
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            width: 100px;
-            height: 100px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 50%;
-        "></div>
-        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">{icon}</div>
-        <div style="
-            font-size: 0.875rem;
-            font-weight: 500;
-            opacity: 0.9;
-            margin-bottom: 0.25rem;
-            letter-spacing: 0.025em;
-            text-transform: uppercase;
-        ">{label}</div>
-        <div style="
-            font-size: 2.5rem;
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -0.025em;
-        ">{value}</div>
-        {f'<div style="font-size: 0.875rem; opacity: 0.85; margin-top: 0.5rem; font-weight: 500;">{sublabel}</div>' if sublabel else ''}
-    </div>
-    """
+    sublabel_html = (
+        f'<div style="font-size:0.8rem;opacity:0.85;margin-top:0.5rem;'
+        f'font-weight:500;">{sublabel}</div>'
+    ) if sublabel else ''
+
+    return (
+        f'<div style="background:{bg};padding:1.75rem;border-radius:1.5rem;color:white;'
+        f'box-shadow:0 8px 24px -4px {glow};position:relative;overflow:hidden;'
+        f'transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);cursor:default;"'
+        f' onmouseover="this.style.transform=\'translateY(-6px) scale(1.02)\';'
+        f'this.style.boxShadow=\'0 16px 40px -8px {glow}\'"'
+        f' onmouseout="this.style.transform=\'translateY(0) scale(1)\';'
+        f'this.style.boxShadow=\'0 8px 24px -4px {glow}\'">'
+        f'<div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;'
+        f'background:rgba(255,255,255,0.1);border-radius:50%;"></div>'
+        f'<div style="position:absolute;bottom:-20px;left:-20px;width:80px;height:80px;'
+        f'background:rgba(255,255,255,0.06);border-radius:50%;"></div>'
+        f'<div style="position:relative;z-index:1;">'
+        f'<div style="font-size:2rem;margin-bottom:0.75rem;">{icon}</div>'
+        f'<div style="font-size:0.75rem;font-weight:700;opacity:0.85;margin-bottom:0.5rem;'
+        f'letter-spacing:0.06em;text-transform:uppercase;">{label}</div>'
+        f'<div style="font-size:2.25rem;font-weight:800;line-height:1.1;'
+        f'letter-spacing:-0.025em;">{value}</div>'
+        f'{sublabel_html}'
+        f'</div></div>'
+    )
 
 
 def render_section_header(icon: str, title: str, subtitle: str = "") -> str:
-    """Header de section moderne avec icône."""
-    return f"""
-    <div style="margin: 2rem 0 1.5rem 0;">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <div style="
-                font-size: 1.75rem;
-                width: 3rem;
-                height: 3rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-                border-radius: 0.75rem;
-                border: 1px solid #a7f3d0;
-            ">{icon}</div>
-            <div>
-                <div style="
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                    color: #0f172a;
-                    line-height: 1.2;
-                ">{title}</div>
-                {f'<div style="font-size: 0.875rem; color: #64748b; margin-top: 0.25rem;">{subtitle}</div>' if subtitle else ''}
-            </div>
-        </div>
-    </div>
-    """
+    subtitle_html = (
+        f'<div style="font-size:0.825rem;color:#B2BEC3;margin-top:0.2rem;'
+        f'font-weight:400;">{subtitle}</div>'
+    ) if subtitle else ''
+    return (
+        f'<div style="margin:2.5rem 0 1.5rem 0;">'
+        f'<div style="display:flex;align-items:center;gap:0.875rem;">'
+        f'<div style="font-size:1.5rem;width:3rem;height:3rem;display:flex;'
+        f'align-items:center;justify-content:center;background:rgba(108,92,231,0.06);'
+        f'border-radius:1rem;border:1px solid rgba(108,92,231,0.1);">{icon}</div>'
+        f'<div>'
+        f'<div style="font-size:1.375rem;font-weight:700;color:#2D3436;'
+        f'line-height:1.2;letter-spacing:-0.02em;">{title}</div>'
+        f'{subtitle_html}'
+        f'</div></div></div>'
+    )
 
 
 def render_splash_screen(
@@ -737,50 +815,180 @@ def render_splash_screen(
     project_code: str,
     logo_emoji: str = "🌿",
 ) -> str:
-    """Génère le HTML complet de la page d'accueil splash screen."""
     members_html = "".join(
         f'<div class="splash-team-member">{member}</div>'
         for member in team_members
     )
 
-    return f"""<div class="splash-container"><div class="geo-decor circle-1"></div><div class="geo-decor circle-2"></div><div class="geo-decor circle-3"></div><div class="geo-line line-1"></div><div class="geo-line line-2"></div><div class="particles"><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div></div><div class="splash-content"><div class="splash-logo-wrapper"><div class="splash-logo-aura"></div><div class="splash-logo-emoji">{logo_emoji}</div></div><h1 class="splash-title">{project_name}</h1><p class="splash-subtitle">{subtitle}</p><div class="splash-tagline">{tagline}</div><div class="splash-team"><div class="splash-team-label">Équipe projet</div><div class="splash-team-list">{members_html}</div><div class="splash-supervisor"><div class="splash-supervisor-label">Encadré par</div><div class="splash-supervisor-name">{supervisor}</div><div class="splash-school">{school} · {project_code}</div></div></div></div></div>"""
+    return (
+        f'<div class="splash-container">'
+        f'<div class="particles">'
+        f'<div class="particle"></div><div class="particle"></div>'
+        f'<div class="particle"></div><div class="particle"></div>'
+        f'<div class="particle"></div><div class="particle"></div>'
+        f'<div class="particle"></div><div class="particle"></div>'
+        f'</div>'
+        f'<div class="splash-content">'
+        f'<div class="splash-logo-wrapper">'
+        f'<div class="splash-logo-aura"></div>'
+        f'<div class="splash-logo-ring"></div>'
+        f'<div class="splash-logo-emoji">{logo_emoji}</div>'
+        f'</div>'
+        f'<h1 class="splash-title">{project_name}</h1>'
+        f'<p class="splash-subtitle">{subtitle}</p>'
+        f'<div class="splash-tagline">{tagline}</div>'
+        f'<div class="splash-team">'
+        f'<div class="splash-team-label">Equipe projet</div>'
+        f'<div class="splash-team-list">{members_html}</div>'
+        f'<div class="splash-supervisor">'
+        f'<div class="splash-supervisor-label">Encadre par</div>'
+        f'<div class="splash-supervisor-name">{supervisor}</div>'
+        f'<div class="splash-school">{school} &middot; {project_code}</div>'
+        f'</div></div></div></div>'
+    )
+
+
+def render_page_header(title: str, subtitle: str, icon: str = "") -> str:
+    icon_html = f'<span style="font-size:2rem;margin-right:0.5rem;">{icon}</span>' if icon else ''
+    return (
+        f'<div style="margin-bottom:2.5rem;padding:2rem 2.5rem;background:white;'
+        f'border-radius:2rem;border:1px solid rgba(108,92,231,0.06);'
+        f'box-shadow:0 2px 8px rgba(108,92,231,0.04),0 8px 24px rgba(108,92,231,0.03);'
+        f'position:relative;overflow:hidden;">'
+        f'<div style="position:absolute;top:0;left:0;right:0;height:4px;'
+        f'background:linear-gradient(90deg,#00D2D3,#6C5CE7,#FECA57);"></div>'
+        f'<div style="display:flex;align-items:center;gap:0.5rem;">'
+        f'{icon_html}'
+        f'<div>'
+        f'<h1 style="font-size:2.5rem;margin:0 !important;padding:0;line-height:1.15;'
+        f'color:#2D3436 !important;-webkit-text-fill-color:#2D3436 !important;">{title}</h1>'
+        f'<p style="font-size:1.05rem;color:#636E72;margin:0.4rem 0 0 0;'
+        f'font-weight:400;">{subtitle}</p>'
+        f'</div></div></div>'
+    )
+
+
+def render_glass_container(content: str, padding: str = "1.75rem") -> str:
+    return (
+        f'<div style="background:white;border-radius:1.5rem;'
+        f'border:1px solid rgba(108,92,231,0.06);'
+        f'box-shadow:0 2px 8px rgba(108,92,231,0.04),0 8px 24px rgba(108,92,231,0.03);'
+        f'padding:{padding};margin-bottom:1.5rem;">'
+        f'{content}</div>'
+    )
+
+
+def render_info_banner(
+    icon: str,
+    title: str,
+    body: str,
+    style: str = "info",
+) -> str:
+    styles = {
+        "info": {
+            "bg": "rgba(84,160,255,0.06)",
+            "border": "#54A0FF",
+            "border_light": "rgba(84,160,255,0.12)",
+            "title_color": "#2E86DE",
+            "text_color": "#2D3436",
+        },
+        "success": {
+            "bg": "rgba(16,185,129,0.06)",
+            "border": "#10b981",
+            "border_light": "rgba(16,185,129,0.12)",
+            "title_color": "#059669",
+            "text_color": "#2D3436",
+        },
+        "warning": {
+            "bg": "rgba(254,202,87,0.08)",
+            "border": "#F39C12",
+            "border_light": "rgba(243,156,18,0.12)",
+            "title_color": "#E67E22",
+            "text_color": "#2D3436",
+        },
+        "danger": {
+            "bg": "rgba(255,107,107,0.06)",
+            "border": "#FF6B6B",
+            "border_light": "rgba(255,107,107,0.12)",
+            "title_color": "#EE5A24",
+            "text_color": "#2D3436",
+        },
+    }
+    s = styles.get(style, styles["info"])
+    return (
+        f'<div style="background:{s["bg"]};padding:1.5rem 1.75rem;'
+        f'border-radius:1.5rem;border:1px solid {s["border_light"]};'
+        f'border-left:4px solid {s["border"]};'
+        f'box-shadow:0 2px 8px rgba(0,0,0,0.02);margin:1rem 0;">'
+        f'<div style="display:flex;align-items:flex-start;gap:0.75rem;">'
+        f'<div style="font-size:1.5rem;flex-shrink:0;margin-top:0.1rem;">{icon}</div>'
+        f'<div>'
+        f'<div style="font-size:1.05rem;font-weight:700;color:{s["title_color"]};'
+        f'margin-bottom:0.4rem;">{title}</div>'
+        f'<div style="color:{s["text_color"]};line-height:1.65;font-size:0.9rem;">'
+        f'{body}</div>'
+        f'</div></div></div>'
+    )
+
+
+def render_status_badge(text: str, color: str = "green") -> str:
+    colors = {
+        "green": ("#059669", "rgba(16,185,129,0.1)", "rgba(16,185,129,0.2)"),
+        "red": ("#EE5A24", "rgba(255,107,107,0.1)", "rgba(255,107,107,0.2)"),
+        "yellow": ("#E67E22", "rgba(254,202,87,0.1)", "rgba(254,202,87,0.2)"),
+        "blue": ("#2E86DE", "rgba(84,160,255,0.1)", "rgba(84,160,255,0.2)"),
+        "purple": ("#6C5CE7", "rgba(108,92,231,0.1)", "rgba(108,92,231,0.2)"),
+    }
+    text_c, bg_c, border_c = colors.get(color, colors["green"])
+    return (
+        f'<span style="display:inline-block;padding:0.25rem 0.75rem;border-radius:999px;'
+        f'font-size:0.75rem;font-weight:700;color:{text_c};background:{bg_c};'
+        f'border:1px solid {border_c};">{text}</span>'
+    )
 
 
 def get_plotly_theme() -> dict:
-    """Configuration Plotly cohérente avec le design teal/vert."""
     return {
         "layout": {
             "font": {
-                "family": "Inter, sans-serif",
-                "color": "#0f172a",
-                "size": 13,
+                "family": "Inter, -apple-system, sans-serif",
+                "color": "#2D3436",
+                "size": 12,
             },
             "paper_bgcolor": "rgba(0,0,0,0)",
-            "plot_bgcolor": "#f8fafc",
+            "plot_bgcolor": "rgba(245,247,255,0.5)",
             "colorway": [
-                "#10b981", "#0ea5e9", "#8b5cf6", "#f59e0b",
-                "#ef4444", "#ec4899", "#14b8a6", "#6366f1",
+                "#6C5CE7", "#00D2D3", "#FECA57", "#54A0FF",
+                "#FF6B6B", "#FD79A8", "#10b981", "#A29BFE",
             ],
             "xaxis": {
-                "gridcolor": "#e2e8f0",
-                "zerolinecolor": "#cbd5e1",
+                "gridcolor": "rgba(108,92,231,0.06)",
+                "zerolinecolor": "rgba(108,92,231,0.1)",
+                "gridwidth": 1,
             },
             "yaxis": {
-                "gridcolor": "#e2e8f0",
-                "zerolinecolor": "#cbd5e1",
+                "gridcolor": "rgba(108,92,231,0.06)",
+                "zerolinecolor": "rgba(108,92,231,0.1)",
+                "gridwidth": 1,
             },
             "title": {
-                "font": {"size": 16, "weight": 700, "color": "#0f172a"},
+                "font": {"size": 15, "weight": 700, "color": "#2D3436"},
+            },
+            "margin": {"t": 48, "b": 40, "l": 48, "r": 24},
+            "hoverlabel": {
+                "bgcolor": "#2D3436",
+                "font_color": "#F5F7FF",
+                "font_size": 12,
+                "font_family": "Inter, sans-serif",
+                "bordercolor": "rgba(255,255,255,0.1)",
             },
         }
     }
 
 
 def inject_styles() -> None:
-    """Injecte tous les styles CSS dans la page Streamlit."""
     st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
 def inject_splash_styles() -> None:
-    """Injecte les styles spécifiques au splash screen."""
     st.markdown(SPLASH_CSS, unsafe_allow_html=True)

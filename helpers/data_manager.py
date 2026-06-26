@@ -32,6 +32,7 @@ STOCK_SCHEMA = {
     "quantity": "int64",
     "min_threshold": "int64",
     "location": "string",
+    "color": "string",
 }
 
 COMMANDES_SCHEMA = {
