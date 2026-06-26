@@ -1,16 +1,10 @@
 """
 Smart Predict AI — Dashboard Streamlit (mono-fichier).
 
-<<<<<<< HEAD
 Dashboard SaaS moderne avec :
-- Page d'accueil splash animée (particules, gradients, glassmorphism)
-- 5 pages métier (vue d'ensemble, stock, prédictions, commandes, robot)
-- Design teal/vert avec animations subtiles
-=======
-Toutes les sections de l'application dans un seul fichier, avec une navigation
-par sidebar (radio). C'est plus simple à maintenir et à présenter qu'une
-architecture multi-pages.
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
+- Page d'accueil splash animee (particules, gradients)
+- 6 pages metier (vue d'ensemble, stock, predictions, emplacements, commandes, robot)
+- Design inspire de Shine (violet, turquoise, jaune)
 
 Lancer le dashboard depuis la racine du projet :
     streamlit run dashboard/app.py
@@ -18,13 +12,10 @@ Lancer le dashboard depuis la racine du projet :
 
 from __future__ import annotations
 
-<<<<<<< HEAD
 import sys
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-=======
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 from datetime import date
 
 import pandas as pd
@@ -33,7 +24,6 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from config.settings import settings
-<<<<<<< HEAD
 from dashboard.styles import (
     get_plotly_theme,
     inject_splash_styles,
@@ -55,30 +45,21 @@ from robot_serveur.api_client import RobotClient
 
 if "splash_shown" not in st.session_state:
     st.session_state["splash_shown"] = False
-=======
-from helpers.data_manager import DataManager
-from prediction.prediction_engine import PredictionEngine
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 
 
 # ============================================================
-# Configuration générale de la page
+# Configuration generale de la page
 # ============================================================
 
 st.set_page_config(
     page_title=settings.app_name,
-<<<<<<< HEAD
     page_icon="🌿",
-=======
-    page_icon="🏭",
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 
 # ============================================================
-<<<<<<< HEAD
 # SPLASH SCREEN (page d'accueil)
 # ============================================================
 
@@ -87,8 +68,8 @@ if not st.session_state["splash_shown"]:
 
     SPLASH_CONFIG = {
         "project_name": "Smart Predict AI",
-        "subtitle": "Système intelligent de gestion d'entrepôt",
-        "tagline": "IA Prédictive · Automatisation · Optimisation",
+        "subtitle": "Systeme intelligent de gestion d'entrepot",
+        "tagline": "IA Predictive · Automatisation · Optimisation",
         "team_members": [
             "Ali EL KOURRI",
             "Ahmed Amine HADRI",
@@ -97,7 +78,7 @@ if not st.session_state["splash_shown"]:
             "Mariam KRISSE",
         ],
         "supervisor": "M. JEBRANE Aissam",
-        "school": "École Centrale Casablanca",
+        "school": "Ecole Centrale Casablanca",
         "project_code": "PLBD 20",
         "logo_emoji": "🌿",
     }
@@ -127,31 +108,15 @@ PLOTLY_THEME = get_plotly_theme()
 
 @st.cache_resource
 def get_data_manager() -> DataManager:
-=======
-# Helpers (anciennement dans utils.py)
-# ============================================================
-
-@st.cache_resource
-def get_data_manager() -> DataManager:
-    """Instance unique du DataManager, partagée pour toute la session."""
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     return DataManager(data_dir=settings.data_dir)
 
 
 @st.cache_resource
 def get_prediction_engine() -> PredictionEngine:
-<<<<<<< HEAD
-=======
-    """Instance unique du PredictionEngine, partagée pour toute la session."""
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     return PredictionEngine(models_dir=settings.models_dir)
 
 
 def format_number(value: float, suffix: str = "") -> str:
-<<<<<<< HEAD
-=======
-    """Format compact pour les KPIs (1234 -> 1.2k, etc.)."""
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     if value >= 1_000_000:
         return f"{value/1_000_000:.1f}M{suffix}"
     if value >= 1_000:
@@ -159,16 +124,13 @@ def format_number(value: float, suffix: str = "") -> str:
     return f"{int(value)}{suffix}"
 
 
-<<<<<<< HEAD
 def apply_plotly_theme(fig: go.Figure) -> go.Figure:
     fig.update_layout(**PLOTLY_THEME["layout"])
     return fig
 
 
-=======
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 # ============================================================
-# Chargement initial des données
+# Chargement initial des donnees
 # ============================================================
 
 dm = get_data_manager()
@@ -180,7 +142,7 @@ try:
     fournisseurs_df = dm.read_fournisseurs()
     historique_df = dm.read_historique()
 except Exception as e:
-    st.error(f"Erreur de chargement des données : {e}")
+    st.error(f"Erreur de chargement des donnees : {e}")
     st.info(
         "Si les CSV n'existent pas, lance d'abord :\n\n"
         "```\npython -m helpers.generate_data\n```"
@@ -189,13 +151,12 @@ except Exception as e:
 
 if stock_df.empty:
     st.warning(
-        "Aucune donnée disponible. Génère les données : `python -m helpers.generate_data`"
+        "Aucune donnee disponible. Genere les donnees : `python -m helpers.generate_data`"
     )
     st.stop()
 
 
 # ============================================================
-<<<<<<< HEAD
 # Sidebar
 # ============================================================
 
@@ -220,23 +181,10 @@ with st.sidebar:
 
     page = st.radio(
         "Navigation",
-=======
-# Sidebar : navigation + infos
-# ============================================================
-
-with st.sidebar:
-    st.title("🏭 Smart Predict AI")
-    st.caption("Entrepôt intelligent")
-    st.markdown("---")
-
-    page = st.radio(
-        "📂 Navigation",
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         options=[
             "🏠 Vue d'ensemble",
             "📦 Stock",
-            "📈 Prédictions",
-<<<<<<< HEAD
+            "📈 Predictions",
             "📍 Emplacements",
             "🚚 Commandes",
             "🤖 Robot",
@@ -265,17 +213,6 @@ with st.sidebar:
         f'font-weight:600;">PLBD 20 · ECC</div></div>',
         unsafe_allow_html=True,
     )
-=======
-            "🚚 Commandes",
-            "🤖 Robot",
-        ],
-        label_visibility="visible",
-    )
-
-    st.markdown("---")
-    st.caption(f"**{settings.app_name}** v{settings.app_version}")
-    st.caption("PLBD 20 — École Centrale Casablanca")
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 
 
 # ============================================================
@@ -283,97 +220,61 @@ with st.sidebar:
 # ============================================================
 
 def render_overview() -> None:
-<<<<<<< HEAD
     st.markdown(
         render_page_header("Vue d'ensemble", "Pilotage en temps reel de votre entrepot intelligent"),
         unsafe_allow_html=True,
     )
 
-=======
-    st.title("🏭 Vue d'ensemble")
-    st.markdown("---")
-
-    # KPIs principaux
-    col1, col2, col3, col4 = st.columns(4)
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     low_stock = dm.get_low_stock_products()
     total_units = stock_df["quantity"].sum() if not stock_df.empty else 0
     pending_orders = (
         (commandes_df["status"] == "pending").sum() if not commandes_df.empty else 0
     )
 
-<<<<<<< HEAD
     col1, col2, col3, col4 = st.columns(4, gap="medium")
 
     with col1:
         st.markdown(
-            render_kpi_card(
-                icon="📦",
-                label="Produits references",
-                value=str(len(stock_df)),
-                sublabel=f"{stock_df['category'].nunique()} categories",
-                gradient="main",
-            ),
+            render_kpi_card("📦", "Produits references", str(len(stock_df)),
+                sublabel=f"{stock_df['category'].nunique()} categories", gradient="main"),
             unsafe_allow_html=True,
         )
     with col2:
         st.markdown(
-            render_kpi_card(
-                icon="📊",
-                label="Unites en stock",
-                value=format_number(total_units),
-                sublabel="Tous produits confondus",
-                gradient="success",
-            ),
+            render_kpi_card("📊", "Unites en stock", format_number(total_units),
+                sublabel="Tous produits confondus", gradient="success"),
             unsafe_allow_html=True,
         )
     with col3:
         gradient_alert = "danger" if len(low_stock) > 0 else "success"
         st.markdown(
-            render_kpi_card(
-                icon="⚠️",
-                label="Alertes stock",
-                value=str(len(low_stock)),
-                sublabel="Produits sous le seuil",
-                gradient=gradient_alert,
-            ),
+            render_kpi_card("⚠️", "Alertes stock", str(len(low_stock)),
+                sublabel="Produits sous le seuil", gradient=gradient_alert),
             unsafe_allow_html=True,
         )
     with col4:
         st.markdown(
-            render_kpi_card(
-                icon="🚚",
-                label="Commandes ouvertes",
-                value=str(int(pending_orders)),
-                sublabel="En attente de livraison",
-                gradient="warning",
-            ),
+            render_kpi_card("🚚", "Commandes ouvertes", str(int(pending_orders)),
+                sublabel="En attente de livraison", gradient="warning"),
             unsafe_allow_html=True,
         )
 
     st.markdown(
-        render_section_header(
-            "🚨", "Alertes stock", "Produits necessitant un reapprovisionnement"
-        ),
+        render_section_header("🚨", "Alertes stock", "Produits necessitant un reapprovisionnement"),
         unsafe_allow_html=True,
     )
 
     if low_stock.empty:
         st.markdown(
-            render_info_banner(
-                "✅", "Stock sain",
+            render_info_banner("✅", "Stock sain",
                 "Aucun produit sous le seuil minimum. Tous les niveaux sont nominaux.",
-                style="success",
-            ),
+                style="success"),
             unsafe_allow_html=True,
         )
     else:
         st.markdown(
-            render_info_banner(
-                "🔔", f"{len(low_stock)} produit(s) a reapprovisionner",
-                "Les produits ci-dessous ont atteint un niveau critique. Action recommandee.",
-                style="danger",
-            ),
+            render_info_banner("🔔", f"{len(low_stock)} produit(s) a reapprovisionner",
+                "Les produits ci-dessous ont atteint un niveau critique.", style="danger"),
             unsafe_allow_html=True,
         )
         display_df = low_stock[
@@ -384,9 +285,7 @@ def render_overview() -> None:
         st.dataframe(display_df, use_container_width=True, hide_index=True)
 
     st.markdown(
-        render_section_header(
-            "📊", "Analyse par categorie", "Repartition du stock dans l'entrepot"
-        ),
+        render_section_header("📊", "Analyse par categorie", "Repartition du stock"),
         unsafe_allow_html=True,
     )
 
@@ -394,19 +293,11 @@ def render_overview() -> None:
 
     with col_left:
         cat_counts = stock_df.groupby("category").size().reset_index(name="count")
-        fig_pie = px.pie(
-            cat_counts,
-            values="count",
-            names="category",
-            title="Nombre de produits",
-            hole=0.6,
-        )
-        fig_pie.update_traces(
-            textposition="outside",
-            textinfo="percent+label",
-            marker=dict(line=dict(color="white", width=2)),
-            pull=[0.03] * len(cat_counts),
-        )
+        fig_pie = px.pie(cat_counts, values="count", names="category",
+                         title="Nombre de produits", hole=0.6)
+        fig_pie.update_traces(textposition="outside", textinfo="percent+label",
+                              marker=dict(line=dict(color="white", width=2)),
+                              pull=[0.03] * len(cat_counts))
         fig_pie = apply_plotly_theme(fig_pie)
         fig_pie.update_layout(height=420, showlegend=False)
         st.plotly_chart(fig_pie, use_container_width=True)
@@ -414,171 +305,45 @@ def render_overview() -> None:
     with col_right:
         cat_qty = stock_df.groupby("category")["quantity"].sum().reset_index()
         cat_qty = cat_qty.sort_values("quantity", ascending=True)
-        fig_bar = px.bar(
-            cat_qty,
-            x="quantity",
-            y="category",
-            orientation="h",
-            title="Volume total par categorie",
-            color="quantity",
-            color_continuous_scale=[[0, "#a7f3d0"], [0.5, "#10b981"], [1, "#059669"]],
-        )
+        fig_bar = px.bar(cat_qty, x="quantity", y="category", orientation="h",
+                         title="Volume total par categorie", color="quantity",
+                         color_continuous_scale=[[0, "#A29BFE"], [1, "#6C5CE7"]])
         fig_bar = apply_plotly_theme(fig_bar)
-        fig_bar.update_layout(
-            height=420,
-            showlegend=False,
-            coloraxis_showscale=False,
-            xaxis_title="Unites",
-            yaxis_title="",
-        )
-        fig_bar.update_traces(
-            marker_line_width=0,
-            marker_cornerradius=6,
-        )
+        fig_bar.update_layout(height=420, showlegend=False, coloraxis_showscale=False,
+                              xaxis_title="Unites", yaxis_title="")
+        fig_bar.update_traces(marker_line_width=0, marker_cornerradius=6)
         st.plotly_chart(fig_bar, use_container_width=True)
 
     st.markdown(
-        render_section_header(
-            "📈", "Tendance globale", "Evolution de la demande dans le temps"
-        ),
+        render_section_header("📈", "Tendance globale", "Evolution de la demande"),
         unsafe_allow_html=True,
     )
-=======
-    col1.metric(
-        "📦 Produits en stock",
-        len(stock_df),
-        help="Nombre de références produit dans l'entrepôt.",
-    )
-    col2.metric(
-        "📊 Unités totales",
-        format_number(total_units),
-        help="Somme des quantités sur tous les produits.",
-    )
-    col3.metric(
-        "⚠️ Produits sous seuil",
-        len(low_stock),
-        delta=f"-{len(low_stock)}" if len(low_stock) > 0 else None,
-        delta_color="inverse",
-    )
-    col4.metric("🚚 Commandes en attente", int(pending_orders))
-
-    st.markdown("---")
-
-    # Alertes stock
-    st.subheader("⚠️ Alertes stock")
-    if low_stock.empty:
-        st.success("✅ Aucun produit sous le seuil minimum. Stock sain.")
-    else:
-        st.warning(f"{len(low_stock)} produit(s) à réapprovisionner.")
-        display_df = low_stock[
-            ["product_id", "name", "category", "quantity", "min_threshold", "location"]
-        ].copy()
-        display_df["déficit"] = display_df["min_threshold"] - display_df["quantity"]
-        display_df = display_df.sort_values("déficit", ascending=False)
-        st.dataframe(
-            display_df,
-            use_container_width=True,
-            hide_index=True,
-        )
-
-    # Répartition par catégorie
-    st.markdown("---")
-    st.subheader("📊 Répartition du stock par catégorie")
-
-    col_left, col_right = st.columns(2)
-
-    with col_left:
-        if not stock_df.empty:
-            cat_counts = stock_df.groupby("category").size().reset_index(name="count")
-            fig_pie = px.pie(
-                cat_counts,
-                values="count",
-                names="category",
-                title="Nombre de produits par catégorie",
-                hole=0.4,
-            )
-            fig_pie.update_layout(height=400)
-            st.plotly_chart(fig_pie, use_container_width=True)
-
-    with col_right:
-        if not stock_df.empty:
-            cat_qty = stock_df.groupby("category")["quantity"].sum().reset_index()
-            fig_bar = px.bar(
-                cat_qty,
-                x="category",
-                y="quantity",
-                title="Volume total par catégorie",
-                color="category",
-            )
-            fig_bar.update_layout(showlegend=False, height=400)
-            st.plotly_chart(fig_bar, use_container_width=True)
-
-    # Tendance globale de la demande
-    st.markdown("---")
-    st.subheader("📈 Tendance globale de la demande")
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 
     if historique_df.empty:
         st.info("Aucun historique de demande disponible.")
     else:
-        daily = historique_df.groupby("date")["quantity"].sum().reset_index()
-        daily = daily.sort_values("date")
-
-<<<<<<< HEAD
+        daily = historique_df.groupby("date")["quantity"].sum().reset_index().sort_values("date")
         fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x=daily["date"],
-            y=daily["quantity"],
-            mode="lines",
-            fill="tozeroy",
-            fillcolor="rgba(16, 185, 129, 0.08)",
-            line=dict(color="#10b981", width=2.5, shape="spline"),
-            name="Demande quotidienne",
-        ))
+        fig.add_trace(go.Scatter(x=daily["date"], y=daily["quantity"], mode="lines",
+            fill="tozeroy", fillcolor="rgba(108,92,231,0.08)",
+            line=dict(color="#6C5CE7", width=2.5, shape="spline"), name="Demande"))
         fig = apply_plotly_theme(fig)
-        fig.update_layout(
-            title="Demande journaliere totale",
-            xaxis_title="Date",
-            yaxis_title="Unites demandees",
-            height=420,
-            hovermode="x unified",
-            showlegend=False,
-        )
-=======
-        fig = px.line(
-            daily,
-            x="date",
-            y="quantity",
-            title="Demande journalière totale (toutes catégories confondues)",
-            labels={"date": "Date", "quantity": "Unités demandées"},
-        )
-        fig.update_traces(line=dict(width=2))
-        fig.update_layout(height=400, hovermode="x unified")
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
+        fig.update_layout(title="Demande journaliere totale", xaxis_title="Date",
+                          yaxis_title="Unites", height=420, hovermode="x unified", showlegend=False)
         st.plotly_chart(fig, use_container_width=True)
 
         last_7 = daily.tail(7)
         avg_last = last_7["quantity"].mean()
         avg_total = daily["quantity"].mean()
-<<<<<<< HEAD
         delta = avg_last - avg_total
-        delta_color = "#10b981" if delta >= 0 else "#ef4444"
+        delta_color = "#10b981" if delta >= 0 else "#FF6B6B"
         delta_icon = "📈" if delta >= 0 else "📉"
-
         st.markdown(
-            render_info_banner(
-                delta_icon,
-                "Performance recente",
-                f"Moyenne 7 jours : <strong style='color: #10b981;'>{avg_last:.0f} unites/jour</strong><br>"
-                f"Ecart a la moyenne globale : <strong style='color: {delta_color};'>{delta:+.0f}</strong>",
-                style="success" if delta >= 0 else "warning",
-            ),
+            render_info_banner(delta_icon, "Performance recente",
+                f"Moyenne 7 jours : <strong style='color:#6C5CE7;'>{avg_last:.0f} unites/jour</strong><br>"
+                f"Ecart a la moyenne globale : <strong style='color:{delta_color};'>{delta:+.0f}</strong>",
+                style="success" if delta >= 0 else "warning"),
             unsafe_allow_html=True,
-=======
-        st.caption(
-            f"Moyenne sur 7 derniers jours : **{avg_last:.0f} unités/jour** "
-            f"(écart moyenne globale : {avg_last - avg_total:+.0f})"
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         )
 
 
@@ -587,7 +352,6 @@ def render_overview() -> None:
 # ============================================================
 
 def render_stock() -> None:
-<<<<<<< HEAD
     st.markdown(
         render_page_header("Gestion du stock", "Inventaire en temps reel de l'entrepot"),
         unsafe_allow_html=True,
@@ -598,216 +362,92 @@ def render_stock() -> None:
         with col1:
             categories = sorted(stock_df["category"].unique())
             selected_cats = st.multiselect("Categories", categories, default=categories)
-=======
-    st.title("📦 Gestion du stock")
-    st.markdown("---")
-
-    # Filtres
-    with st.expander("🔍 Filtres", expanded=True):
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            categories = sorted(stock_df["category"].unique())
-            selected_cats = st.multiselect("Catégories", categories, default=categories)
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         with col2:
             show_low_only = st.checkbox("Seulement produits sous seuil")
         with col3:
             search = st.text_input("Rechercher", placeholder="Nom ou ID...")
 
-<<<<<<< HEAD
-=======
-    # Application des filtres
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     filtered = stock_df[stock_df["category"].isin(selected_cats)].copy()
     if show_low_only:
         filtered = filtered[filtered["quantity"] < filtered["min_threshold"]]
     if search:
-        mask = (
-            filtered["name"].str.contains(search, case=False, na=False)
-            | filtered["product_id"].str.contains(search, case=False, na=False)
-        )
+        mask = (filtered["name"].str.contains(search, case=False, na=False)
+                | filtered["product_id"].str.contains(search, case=False, na=False))
         filtered = filtered[mask]
 
-<<<<<<< HEAD
     col1, col2, col3 = st.columns(3, gap="medium")
     with col1:
-        st.markdown(
-            render_kpi_card("📋", "Produits affiches", str(len(filtered)),
-                          gradient="main"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_kpi_card("📋", "Produits affiches", str(len(filtered)),
+                    gradient="main"), unsafe_allow_html=True)
     with col2:
-        st.markdown(
-            render_kpi_card("📦", "Unites totales",
-                          format_number(int(filtered["quantity"].sum())),
-                          gradient="success"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_kpi_card("📦", "Unites totales",
+                    format_number(int(filtered["quantity"].sum())),
+                    gradient="success"), unsafe_allow_html=True)
     with col3:
         n_low = int((filtered["quantity"] < filtered["min_threshold"]).sum())
-        st.markdown(
-            render_kpi_card("⚠️", "Sous seuil", str(n_low),
-                          gradient="danger" if n_low > 0 else "success"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_kpi_card("⚠️", "Sous seuil", str(n_low),
+                    gradient="danger" if n_low > 0 else "success"), unsafe_allow_html=True)
 
-    st.markdown(
-        render_section_header("📋", "Liste des produits", f"{len(filtered)} resultats"),
-        unsafe_allow_html=True,
-    )
-=======
-    # KPIs filtrés
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Produits affichés", len(filtered))
-    col2.metric("Unités totales", int(filtered["quantity"].sum()))
-    col3.metric(
-        "Sous seuil",
-        int((filtered["quantity"] < filtered["min_threshold"]).sum()),
-    )
-
-    st.markdown("---")
-
-    # Tableau avec statut visuel
-    st.subheader(f"Liste des produits ({len(filtered)} résultats)")
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
+    st.markdown(render_section_header("📋", "Liste des produits", f"{len(filtered)} resultats"),
+                unsafe_allow_html=True)
     display = filtered.copy()
     display["statut"] = display.apply(
         lambda r: "🔴 Critique" if r["quantity"] < r["min_threshold"]
         else "🟢 OK" if r["quantity"] >= r["min_threshold"] * 2
-        else "🟡 Attention",
-        axis=1,
-    )
+        else "🟡 Attention", axis=1)
     st.dataframe(
         display[["product_id", "name", "category", "quantity",
-<<<<<<< HEAD
                  "min_threshold", "location", "color", "statut"]],
-=======
-                 "min_threshold", "location", "statut"]],
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-        use_container_width=True,
-        hide_index=True,
-    )
+        use_container_width=True, hide_index=True)
 
-<<<<<<< HEAD
-    st.markdown(
-        render_section_header("✏️", "Mise a jour du stock",
-                             "Ajouter ou retirer des unites"),
-        unsafe_allow_html=True,
-    )
+    st.markdown(render_section_header("✏️", "Mise a jour du stock", "Ajouter ou retirer des unites"),
+                unsafe_allow_html=True)
     with st.form("update_stock_form"):
         col1, col2, col3 = st.columns([2, 1, 1], gap="medium")
-=======
-    # Mise à jour manuelle
-    st.markdown("---")
-    st.subheader("✏️ Mise à jour manuelle du stock")
-
-    with st.form("update_stock_form"):
-        col1, col2, col3 = st.columns([2, 1, 1])
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         with col1:
-            product_id = st.selectbox(
-                "Produit",
-                options=stock_df["product_id"].tolist(),
-                format_func=lambda pid: f"{pid} - {stock_df.loc[stock_df['product_id'] == pid, 'name'].iloc[0]}",
-            )
+            product_id = st.selectbox("Produit", options=stock_df["product_id"].tolist(),
+                format_func=lambda pid: f"{pid} - {stock_df.loc[stock_df['product_id'] == pid, 'name'].iloc[0]}")
         with col2:
-<<<<<<< HEAD
             delta = st.number_input("Variation", value=0, step=1)
-=======
-            delta = st.number_input(
-                "Variation (+ ou -)", value=0, step=1,
-                help="Positif = ajout, négatif = retrait",
-            )
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         with col3:
             st.write("")
             st.write("")
             submitted = st.form_submit_button("Appliquer", type="primary")
-
         if submitted and delta != 0:
             try:
                 new_qty = dm.update_stock_quantity(product_id, delta)
-<<<<<<< HEAD
                 st.success(f"✅ Stock {product_id} mis a jour : {new_qty}")
-=======
-                st.success(f"✅ Stock {product_id} mis à jour : {new_qty}")
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
                 st.rerun()
             except ValueError as e:
                 st.error(f"❌ {e}")
 
-<<<<<<< HEAD
-    st.markdown(
-        render_section_header("📊", "Visualisation",
-                             "Explorer la repartition du stock"),
-        unsafe_allow_html=True,
-    )
-    view_mode = st.radio(
-        "Type de visualisation",
-        ["Quantite par produit", "Quantite par categorie", "Top 10 produits"],
-        horizontal=True,
-        label_visibility="collapsed",
-    )
+    st.markdown(render_section_header("📊", "Visualisation", "Explorer la repartition du stock"),
+                unsafe_allow_html=True)
+    view_mode = st.radio("Type de visualisation",
+        ["Quantite par produit", "Quantite par categorie", "Top produits"],
+        horizontal=True, label_visibility="collapsed")
 
     if view_mode == "Quantite par produit":
-        fig = px.bar(
-            filtered.sort_values("quantity", ascending=False),
-            x="product_id", y="quantity", color="category",
-            title="Quantite en stock par produit",
-        )
+        fig = px.bar(filtered.sort_values("quantity", ascending=False),
+                     x="product_id", y="quantity", color="color", title="Quantite en stock par produit")
     elif view_mode == "Quantite par categorie":
         cat_data = filtered.groupby("category")["quantity"].sum().reset_index()
-        fig = px.bar(
-            cat_data, x="category", y="quantity",
-            title="Quantite totale par categorie", color="category",
-=======
-    # Visualisation
-    st.markdown("---")
-    st.subheader("📊 Visualisation du stock")
-
-    view_mode = st.radio(
-        "Type de visualisation",
-        ["Quantité par produit", "Quantité par catégorie", "Top 10 produits"],
-        horizontal=True,
-    )
-
-    if view_mode == "Quantité par produit":
-        fig = px.bar(
-            filtered.sort_values("quantity", ascending=False),
-            x="product_id", y="quantity", color="category",
-            title="Quantité en stock par produit",
-        )
-    elif view_mode == "Quantité par catégorie":
-        cat_data = filtered.groupby("category")["quantity"].sum().reset_index()
-        fig = px.bar(
-            cat_data, x="category", y="quantity",
-            title="Quantité totale par catégorie", color="category",
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-        )
+        fig = px.bar(cat_data, x="category", y="quantity",
+                     title="Quantite totale par categorie", color="category")
     else:
-        top10 = filtered.nlargest(10, "quantity")
-        fig = px.bar(
-            top10, x="quantity", y="name", orientation="h",
-<<<<<<< HEAD
-            title="Top 10 des produits les plus stockes", color="category",
-        )
+        fig = px.bar(filtered.sort_values("quantity", ascending=True),
+                     x="quantity", y="name", orientation="h",
+                     title="Produits par stock", color="color")
         fig.update_layout(yaxis={"categoryorder": "total ascending"})
 
     fig = apply_plotly_theme(fig)
     fig.update_traces(marker_line_width=0, marker_cornerradius=5)
-=======
-            title="Top 10 des produits les plus stockés", color="category",
-        )
-        fig.update_layout(yaxis={"categoryorder": "total ascending"})
-
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
     fig.update_layout(height=500)
     st.plotly_chart(fig, use_container_width=True)
 
 
 # ============================================================
-<<<<<<< HEAD
-# PAGE 3 : Prédictions (avec modèle + évaluation)
+# PAGE 3 : Predictions
 # ============================================================
 
 def render_predictions() -> None:
@@ -815,92 +455,40 @@ def render_predictions() -> None:
         render_page_header("Previsions de demande", "IA predictive avec auto-selection du meilleur modele"),
         unsafe_allow_html=True,
     )
-=======
-# PAGE 3 : Prédictions
-# ============================================================
-
-def render_predictions() -> None:
-    st.title("📈 Prévisions de demande")
-    st.markdown("---")
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 
     if historique_df.empty:
         st.warning("Aucun historique de demande disponible.")
         return
 
-<<<<<<< HEAD
-    st.markdown(
-        render_section_header("⚙️", "Configuration", "Selectionne un produit et un horizon de prediction"),
-        unsafe_allow_html=True,
-    )
+    st.markdown(render_section_header("⚙️", "Configuration",
+        "Selectionne un produit et un horizon de prediction"), unsafe_allow_html=True)
 
     col1, col2 = st.columns([2, 1], gap="medium")
     with col1:
-        product_id = st.selectbox(
-            "Selectionne un produit",
-=======
-    # Sélection produit + horizon
-    col1, col2 = st.columns([2, 1])
-    with col1:
-        product_id = st.selectbox(
-            "Sélectionne un produit",
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
+        product_id = st.selectbox("Selectionne un produit",
             options=stock_df["product_id"].tolist(),
-            format_func=lambda pid: f"{pid} - {stock_df.loc[stock_df['product_id'] == pid, 'name'].iloc[0]}",
-        )
+            format_func=lambda pid: f"{pid} - {stock_df.loc[stock_df['product_id'] == pid, 'name'].iloc[0]} ({stock_df.loc[stock_df['product_id'] == pid, 'color'].iloc[0]})")
     with col2:
-        horizon = st.slider(
-<<<<<<< HEAD
-            "Horizon (jours)",
-=======
-            "Horizon de prévision (jours)",
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-            min_value=1, max_value=30,
-            value=settings.default_forecast_horizon,
-        )
+        horizon = st.slider("Horizon (jours)", min_value=1, max_value=30,
+                             value=settings.default_forecast_horizon)
 
-<<<<<<< HEAD
     if st.button("🚀 Lancer la prediction", type="primary"):
-        with st.spinner(
-            "🧠 Le modele analyse les patterns historiques et evalue sa performance... "
-            "(1-2 min la premiere fois, instantane ensuite)"
-=======
-    # Lancement
-    if st.button("🚀 Lancer la prédiction", type="primary"):
-        with st.spinner(
-            "Entraînement du modèle (auto-sélection entre Régression, ARIMA, SARIMA)... "
-            "Cela peut prendre 30-60s la première fois pour ce produit."
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-        ):
+        with st.spinner("🧠 Analyse des patterns historiques..."):
             try:
-                predictions = engine.predict(
-                    product_id=product_id,
-                    n_days=horizon,
-                    history_csv=settings.historique_csv,
-                )
-<<<<<<< HEAD
+                predictions = engine.predict(product_id=product_id, n_days=horizon,
+                                             history_csv=settings.historique_csv)
                 model_info = engine.get_model_info(product_id)
-                evaluation = engine.evaluate_model(
-                    product_id=product_id,
-                    history_csv=settings.historique_csv,
-                    test_ratio=0.2,
-                )
-
+                evaluation = engine.evaluate_model(product_id=product_id,
+                    history_csv=settings.historique_csv, test_ratio=0.2)
                 st.session_state["last_predictions"] = predictions
                 st.session_state["last_product"] = product_id
                 st.session_state["last_model_info"] = model_info
                 st.session_state["last_evaluation"] = evaluation
                 st.success("✅ Prediction terminee avec succes")
-=======
-                st.session_state["last_predictions"] = predictions
-                st.session_state["last_product"] = product_id
-                st.success("✅ Prédiction terminée")
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
             except Exception as e:
                 st.error(f"❌ Erreur : {e}")
                 return
 
-<<<<<<< HEAD
     if "last_predictions" in st.session_state:
         predictions = st.session_state["last_predictions"]
         last_product = st.session_state["last_product"]
@@ -909,9 +497,6 @@ def render_predictions() -> None:
 
         if model_info:
             mc = model_info['color']
-            mi_icon = model_info['icon']
-            mi_name = model_info['model_name']
-            mi_desc = model_info['description']
             st.markdown(
                 f'<div style="background:white;border-radius:1.5rem;'
                 f'border:1px solid rgba(108,92,231,0.06);'
@@ -920,194 +505,86 @@ def render_predictions() -> None:
                 f'<div style="display:flex;align-items:center;gap:1.25rem;">'
                 f'<div style="font-size:2.5rem;line-height:1;background:rgba(108,92,231,0.06);'
                 f'padding:1rem;border-radius:1rem;border:1px solid rgba(108,92,231,0.1);">'
-                f'{mi_icon}</div>'
+                f'{model_info["icon"]}</div>'
                 f'<div style="flex:1;">'
                 f'<div style="font-size:0.65rem;color:#B2BEC3;letter-spacing:0.15em;'
                 f'text-transform:uppercase;font-weight:700;margin-bottom:0.35rem;">'
                 f'Algorithme selectionne automatiquement</div>'
                 f'<div style="font-size:1.5rem;font-weight:800;color:{mc};'
-                f'margin-bottom:0.4rem;letter-spacing:-0.02em;">{mi_name}</div>'
+                f'margin-bottom:0.4rem;letter-spacing:-0.02em;">{model_info["model_name"]}</div>'
                 f'<div style="font-size:0.9rem;color:#636E72;line-height:1.6;">'
-                f'{mi_desc}</div>'
+                f'{model_info["description"]}</div>'
                 f'</div></div></div>',
                 unsafe_allow_html=True,
             )
 
         if evaluation:
-            st.markdown(
-                render_section_header(
-                    "🎯", "Performance du modele",
-                    f"Evaluation sur {evaluation['n_test']} jours de donnees reelles"
-                ),
-                unsafe_allow_html=True,
-            )
+            st.markdown(render_section_header("🎯", "Performance du modele",
+                f"Evaluation sur {evaluation['n_test']} jours"), unsafe_allow_html=True)
 
             col1, col2, col3, col4 = st.columns(4, gap="medium")
-
             with col1:
                 score = evaluation["reliability_score"]
-                if score >= 80:
-                    grad = "success"
-                    label_extra = "Excellent"
-                elif score >= 60:
-                    grad = "main"
-                    label_extra = "Bon"
-                elif score >= 40:
-                    grad = "warning"
-                    label_extra = "Moyen"
-                else:
-                    grad = "danger"
-                    label_extra = "A ameliorer"
-
-                st.markdown(
-                    render_kpi_card(
-                        icon="🏆",
-                        label="Score de fiabilite",
-                        value=f"{score:.0f}/100",
-                        sublabel=label_extra,
-                        gradient=grad,
-                    ),
-                    unsafe_allow_html=True,
-                )
-
+                grad = "success" if score >= 80 else "main" if score >= 60 else "warning" if score >= 40 else "danger"
+                label_extra = "Excellent" if score >= 80 else "Bon" if score >= 60 else "Moyen" if score >= 40 else "A ameliorer"
+                st.markdown(render_kpi_card("🏆", "Score", f"{score:.0f}/100",
+                    sublabel=label_extra, gradient=grad), unsafe_allow_html=True)
             with col2:
-                st.markdown(
-                    render_kpi_card(
-                        icon="📊",
-                        label="Erreur moyenne",
-                        value=f"{evaluation['mape']:.1f}%",
-                        sublabel="MAPE",
-                        gradient="purple",
-                    ),
-                    unsafe_allow_html=True,
-                )
-
+                st.markdown(render_kpi_card("📊", "MAPE", f"{evaluation['mape']:.1f}%",
+                    gradient="purple"), unsafe_allow_html=True)
             with col3:
-                st.markdown(
-                    render_kpi_card(
-                        icon="📏",
-                        label="MAE",
-                        value=f"{evaluation['mae']:.1f} u.",
-                        sublabel="Erreur absolue moyenne",
-                        gradient="main",
-                    ),
-                    unsafe_allow_html=True,
-                )
-
+                st.markdown(render_kpi_card("📏", "MAE", f"{evaluation['mae']:.1f} u.",
+                    gradient="main"), unsafe_allow_html=True)
             with col4:
-                st.markdown(
-                    render_kpi_card(
-                        icon="📐",
-                        label="RMSE",
-                        value=f"{evaluation['rmse']:.1f} u.",
-                        sublabel="Racine erreur quadratique",
-                        gradient="warning",
-                    ),
-                    unsafe_allow_html=True,
-                )
+                st.markdown(render_kpi_card("📐", "RMSE", f"{evaluation['rmse']:.1f} u.",
+                    gradient="warning"), unsafe_allow_html=True)
 
-            st.markdown(
-                render_section_header("🔬", "Validation : predit vs reel",
-                    f"Comparaison sur les {evaluation['n_test']} derniers jours hors entrainement"),
-                unsafe_allow_html=True,
-            )
+            st.markdown(render_section_header("🔬", "Validation : predit vs reel",
+                f"Comparaison sur {evaluation['n_test']} jours hors entrainement"),
+                unsafe_allow_html=True)
 
             fig_eval = go.Figure()
-            fig_eval.add_trace(go.Scatter(
-                x=evaluation["test_dates"],
-                y=evaluation["actual_values"],
-                mode="lines+markers",
-                name="Demande reelle",
-                line=dict(color="#0ea5e9", width=2.5, shape="spline"),
-                marker=dict(size=7),
-                fill="tozeroy",
-                fillcolor="rgba(14, 165, 233, 0.06)",
-            ))
-            fig_eval.add_trace(go.Scatter(
-                x=evaluation["test_dates"],
-                y=evaluation["predicted_values"],
-                mode="lines+markers",
-                name="Prediction du modele",
-                line=dict(color="#10b981", width=2.5, dash="dash", shape="spline"),
-                marker=dict(size=7, symbol="diamond"),
-            ))
+            fig_eval.add_trace(go.Scatter(x=evaluation["test_dates"], y=evaluation["actual_values"],
+                mode="lines+markers", name="Demande reelle",
+                line=dict(color="#54A0FF", width=2.5, shape="spline"), marker=dict(size=7),
+                fill="tozeroy", fillcolor="rgba(84,160,255,0.06)"))
+            fig_eval.add_trace(go.Scatter(x=evaluation["test_dates"], y=evaluation["predicted_values"],
+                mode="lines+markers", name="Prediction",
+                line=dict(color="#6C5CE7", width=2.5, dash="dash", shape="spline"),
+                marker=dict(size=7, symbol="diamond")))
             fig_eval = apply_plotly_theme(fig_eval)
-            fig_eval.update_layout(
-                xaxis_title="Date",
-                yaxis_title="Quantite demandee",
-                height=420,
+            fig_eval.update_layout(xaxis_title="Date", yaxis_title="Quantite", height=420,
                 hovermode="x unified",
-                legend=dict(
-                    orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1,
-                    bgcolor="rgba(255,255,255,0.7)", bordercolor="rgba(0,0,0,0.05)", borderwidth=1,
-                ),
-            )
+                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
             st.plotly_chart(fig_eval, use_container_width=True)
 
-            st.markdown(
-                render_info_banner(
-                    "📐",
-                    "Methodologie d'evaluation",
-                    f"Le modele a ete entraine sur les <strong>{evaluation['n_train']} premiers jours</strong>, "
-                    f"puis evalue sur les <strong>{evaluation['n_test']} derniers jours</strong> "
-                    f"({int(evaluation['test_ratio']*100)}% du jeu de donnees).<br><br>"
-                    f"<strong>MAPE</strong> ({evaluation['mape']:.1f}%) : pourcentage d'erreur moyen<br>"
-                    f"<strong>MAE</strong> ({evaluation['mae']:.1f} u.) : ecart absolu moyen<br>"
-                    f"<strong>RMSE</strong> ({evaluation['rmse']:.1f} u.) : penalise les grosses erreurs<br>"
-                    f"<strong>Score</strong> : indicateur synthetique (100 - MAPE, plafonne a 100)",
-                    style="info",
-                ),
-                unsafe_allow_html=True,
-            )
+            st.markdown(render_info_banner("📐", "Methodologie",
+                f"Entraine sur <strong>{evaluation['n_train']} jours</strong>, "
+                f"evalue sur <strong>{evaluation['n_test']} jours</strong> "
+                f"({int(evaluation['test_ratio']*100)}%).<br>"
+                f"<strong>MAPE</strong> ({evaluation['mape']:.1f}%) · "
+                f"<strong>MAE</strong> ({evaluation['mae']:.1f} u.) · "
+                f"<strong>RMSE</strong> ({evaluation['rmse']:.1f} u.)",
+                style="info"), unsafe_allow_html=True)
 
-        st.markdown(
-            render_section_header(
-                "📊", f"Previsions futures pour {last_product}",
-                "Projection sur les jours a venir"
-            ),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_section_header("📊", f"Previsions futures pour {last_product}",
+            "Projection sur les jours a venir"), unsafe_allow_html=True)
 
-=======
-    # Affichage des résultats
-    if "last_predictions" in st.session_state:
-        predictions = st.session_state["last_predictions"]
-        last_product = st.session_state["last_product"]
-
-        st.markdown("---")
-        st.subheader(f"📊 Prévisions pour {last_product}")
-
-        # Historique récent + prévisions
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         hist = historique_df[historique_df["product_id"] == last_product].copy()
-        hist = hist.groupby("date")["quantity"].sum().reset_index()
-        hist = hist.sort_values("date").tail(60)
+        hist = hist.groupby("date")["quantity"].sum().reset_index().sort_values("date").tail(60)
 
         fig = go.Figure()
-        fig.add_trace(go.Scatter(
-            x=hist["date"], y=hist["quantity"],
-            mode="lines", name="Historique",
-<<<<<<< HEAD
-            line=dict(color="#0ea5e9", width=2, shape="spline"),
-            fill="tozeroy",
-            fillcolor="rgba(14, 165, 233, 0.06)",
-        ))
-        fig.add_trace(go.Scatter(
-            x=predictions.index, y=predictions.values,
+        fig.add_trace(go.Scatter(x=hist["date"], y=hist["quantity"], mode="lines",
+            name="Historique", line=dict(color="#54A0FF", width=2, shape="spline"),
+            fill="tozeroy", fillcolor="rgba(84,160,255,0.06)"))
+        fig.add_trace(go.Scatter(x=predictions.index, y=predictions.values,
             mode="lines+markers", name="Prediction IA",
-            line=dict(color="#10b981", width=3, dash="dash", shape="spline"),
-            marker=dict(size=9, line=dict(color="white", width=2)),
-        ))
+            line=dict(color="#6C5CE7", width=3, dash="dash", shape="spline"),
+            marker=dict(size=9, line=dict(color="white", width=2))))
         fig = apply_plotly_theme(fig)
-        fig.update_layout(
-            title=f"Evolution + prevision sur {len(predictions)} jours",
-            xaxis_title="Date", yaxis_title="Quantite",
-            height=480, hovermode="x unified",
-            legend=dict(
-                orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1,
-                bgcolor="rgba(255,255,255,0.7)", bordercolor="rgba(0,0,0,0.05)", borderwidth=1,
-            ),
-        )
+        fig.update_layout(title=f"Evolution + prevision sur {len(predictions)} jours",
+            xaxis_title="Date", yaxis_title="Quantite", height=480, hovermode="x unified",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
         st.plotly_chart(fig, use_container_width=True)
 
         total = int(predictions.sum())
@@ -1117,24 +594,14 @@ def render_predictions() -> None:
 
         col1, col2, col3 = st.columns(3, gap="medium")
         with col1:
-            st.markdown(
-                render_kpi_card("📈", "Demande totale prevue",
-                              f"{total} u.", gradient="main"),
-                unsafe_allow_html=True,
-            )
+            st.markdown(render_kpi_card("📈", "Demande totale", f"{total} u.",
+                gradient="main"), unsafe_allow_html=True)
         with col2:
-            st.markdown(
-                render_kpi_card("📊", "Moyenne journaliere",
-                              f"{avg:.0f} u.", gradient="purple"),
-                unsafe_allow_html=True,
-            )
+            st.markdown(render_kpi_card("📊", "Moyenne/jour", f"{avg:.0f} u.",
+                gradient="purple"), unsafe_allow_html=True)
         with col3:
-            st.markdown(
-                render_kpi_card("🎯", "Pic prevu",
-                              f"{max_val} u.", sublabel=max_day,
-                              gradient="warning"),
-                unsafe_allow_html=True,
-            )
+            st.markdown(render_kpi_card("🎯", "Pic prevu", f"{max_val} u.",
+                sublabel=max_day, gradient="warning"), unsafe_allow_html=True)
 
         col1, col2 = st.columns(2, gap="medium")
         with col1:
@@ -1142,149 +609,41 @@ def render_predictions() -> None:
             pred_df.columns = ["Date", "Demande prevue"]
             pred_df["Demande prevue"] = pred_df["Demande prevue"].round(0).astype(int)
             st.dataframe(pred_df, use_container_width=True, hide_index=True)
-
         with col2:
-=======
-            line=dict(color="#1f77b4", width=2),
-        ))
-        fig.add_trace(go.Scatter(
-            x=predictions.index, y=predictions.values,
-            mode="lines+markers", name="Prédiction",
-            line=dict(color="#ff7f0e", width=3, dash="dash"),
-            marker=dict(size=8),
-        ))
-        fig.update_layout(
-            title=f"Historique récent + Prévision sur {len(predictions)} jours",
-            xaxis_title="Date", yaxis_title="Quantité demandée",
-            height=500, hovermode="x unified",
-        )
-        st.plotly_chart(fig, use_container_width=True)
-
-        # Tableau + stats
-        st.subheader("📋 Détail des prévisions")
-        pred_df = predictions.reset_index()
-        pred_df.columns = ["Date", "Demande prévue"]
-        pred_df["Demande prévue"] = pred_df["Demande prévue"].round(0).astype(int)
-
-        col1, col2 = st.columns(2)
-        with col1:
-            st.dataframe(pred_df, use_container_width=True, hide_index=True)
-        with col2:
-            total = int(predictions.sum())
-            avg = float(predictions.mean())
-            max_day = predictions.idxmax().strftime("%Y-%m-%d")
-            max_val = int(predictions.max())
-
-            st.metric("Demande totale prévue", f"{total} unités")
-            st.metric("Moyenne journalière", f"{avg:.1f} unités/jour")
-            st.metric("Pic prévu", f"{max_val} unités", delta=f"le {max_day}")
-
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-            current_stock = int(
-                stock_df.loc[stock_df["product_id"] == last_product, "quantity"].iloc[0]
-            )
+            current_stock = int(stock_df.loc[stock_df["product_id"] == last_product, "quantity"].iloc[0])
             if total > current_stock:
-<<<<<<< HEAD
-                st.markdown(
-                    render_info_banner(
-                        "⚠️",
-                        "Reapprovisionnement requis",
-                        f"Stock actuel : <strong>{current_stock} unites</strong><br>"
-                        f"Demande prevue : <strong>{total} unites</strong><br>"
-                        f"Deficit : <strong>{total - current_stock} unites</strong>",
-                        style="danger",
-                    ),
-                    unsafe_allow_html=True,
-                )
+                st.markdown(render_info_banner("⚠️", "Reapprovisionnement requis",
+                    f"Stock : <strong>{current_stock} u.</strong><br>"
+                    f"Demande : <strong>{total} u.</strong><br>"
+                    f"Deficit : <strong>{total - current_stock} u.</strong>",
+                    style="danger"), unsafe_allow_html=True)
             else:
-                st.markdown(
-                    render_info_banner(
-                        "✅",
-                        "Stock suffisant",
-                        f"Stock actuel : <strong>{current_stock} unites</strong><br>"
-                        f"Demande prevue : <strong>{total} unites</strong><br>"
-                        f"Marge de securite : <strong>{current_stock - total} unites</strong>",
-                        style="success",
-                    ),
-                    unsafe_allow_html=True,
-                )
+                st.markdown(render_info_banner("✅", "Stock suffisant",
+                    f"Stock : <strong>{current_stock} u.</strong><br>"
+                    f"Demande : <strong>{total} u.</strong><br>"
+                    f"Marge : <strong>{current_stock - total} u.</strong>",
+                    style="success"), unsafe_allow_html=True)
 
-    st.markdown(
-        render_section_header("🔬", "Comparaison multi-produits",
-                             "Compare jusqu'a 5 produits simultanement"),
-        unsafe_allow_html=True,
-    )
-    selected_products = st.multiselect(
-        "Selectionne des produits a comparer",
-=======
-                st.error(
-                    f"⚠️ Stock actuel ({current_stock}) insuffisant pour la "
-                    f"demande prévue ({total}). Réapprovisionnement recommandé."
-                )
-            else:
-                st.success(
-                    f"✅ Stock actuel ({current_stock}) suffisant pour la "
-                    f"demande prévue ({total})."
-                )
-
-    # Comparaison multi-produits
-    st.markdown("---")
-    st.subheader("🔬 Comparaison multi-produits")
-
-    selected_products = st.multiselect(
-        "Compare la demande prévue pour plusieurs produits",
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-        options=stock_df["product_id"].tolist(),
-        max_selections=5,
-    )
+    st.markdown(render_section_header("🔬", "Comparaison multi-produits",
+        "Compare jusqu'a 4 produits"), unsafe_allow_html=True)
+    selected_products = st.multiselect("Selectionne des produits",
+        options=stock_df["product_id"].tolist(), max_selections=4)
 
     if selected_products and st.button("Comparer", key="compare_btn"):
-<<<<<<< HEAD
-        with st.spinner("Calcul des previsions..."):
-=======
-        with st.spinner("Calcul des prévisions..."):
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
+        with st.spinner("Calcul..."):
             fig_compare = go.Figure()
             for pid in selected_products:
                 try:
-                    preds = engine.predict(
-<<<<<<< HEAD
-                        product_id=pid, n_days=horizon,
-=======
-                        product_id=pid,
-                        n_days=horizon,
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-                        history_csv=settings.historique_csv,
-                    )
-                    fig_compare.add_trace(go.Scatter(
-                        x=preds.index, y=preds.values,
+                    preds = engine.predict(product_id=pid, n_days=horizon,
+                                           history_csv=settings.historique_csv)
+                    fig_compare.add_trace(go.Scatter(x=preds.index, y=preds.values,
                         mode="lines+markers", name=pid,
-<<<<<<< HEAD
-                        line=dict(width=2.5, shape="spline"),
-                        marker=dict(size=7),
-                    ))
+                        line=dict(width=2.5, shape="spline"), marker=dict(size=7)))
                 except Exception as e:
-                    st.warning(f"Echec prediction {pid} : {e}")
-
+                    st.warning(f"Echec {pid} : {e}")
             fig_compare = apply_plotly_theme(fig_compare)
-            fig_compare.update_layout(
-                title="Comparaison des previsions",
-                xaxis_title="Date", yaxis_title="Demande prevue",
-                height=500, hovermode="x unified",
-                legend=dict(
-                    bgcolor="rgba(255,255,255,0.7)", bordercolor="rgba(0,0,0,0.05)", borderwidth=1,
-                ),
-=======
-                    ))
-                except Exception as e:
-                    st.warning(f"Échec prédiction {pid} : {e}")
-
-            fig_compare.update_layout(
-                title="Comparaison des prévisions",
-                xaxis_title="Date", yaxis_title="Demande prévue",
-                height=500, hovermode="x unified",
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-            )
+            fig_compare.update_layout(title="Comparaison", xaxis_title="Date",
+                yaxis_title="Demande prevue", height=500, hovermode="x unified")
             st.plotly_chart(fig_compare, use_container_width=True)
 
 
@@ -1293,418 +652,181 @@ def render_predictions() -> None:
 # ============================================================
 
 def render_commandes() -> None:
-<<<<<<< HEAD
-    st.markdown(
-        render_page_header("Commandes fournisseurs", "Suivi et gestion des commandes"),
-        unsafe_allow_html=True,
-    )
+    st.markdown(render_page_header("Commandes fournisseurs", "Suivi et gestion des commandes"),
+                unsafe_allow_html=True)
 
     if commandes_df.empty:
         st.warning("Aucune commande a afficher.")
-=======
-    st.title("🚚 Commandes fournisseurs")
-    st.markdown("---")
-
-    if commandes_df.empty:
-        st.warning("Aucune commande à afficher.")
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         return
 
     cmd_df = commandes_df.copy()
     cmd_df["order_date"] = pd.to_datetime(cmd_df["order_date"])
 
-<<<<<<< HEAD
     col1, col2, col3, col4 = st.columns(4, gap="medium")
     with col1:
-        st.markdown(
-            render_kpi_card("📋", "Total commandes", str(len(cmd_df)),
-                          gradient="main"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_kpi_card("📋", "Total", str(len(cmd_df)), gradient="main"),
+                    unsafe_allow_html=True)
     with col2:
-        st.markdown(
-            render_kpi_card("⏳", "En attente",
-                          str(int((cmd_df["status"] == "pending").sum())),
-                          gradient="warning"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_kpi_card("⏳", "En attente",
+            str(int((cmd_df["status"] == "pending").sum())), gradient="warning"),
+            unsafe_allow_html=True)
     with col3:
-        st.markdown(
-            render_kpi_card("🚚", "En livraison",
-                          str(int((cmd_df["status"] == "shipped").sum())),
-                          gradient="purple"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_kpi_card("🚚", "En livraison",
+            str(int((cmd_df["status"] == "shipped").sum())), gradient="blue"),
+            unsafe_allow_html=True)
     with col4:
-        st.markdown(
-            render_kpi_card("✅", "Livrees",
-                          str(int((cmd_df["status"] == "delivered").sum())),
-                          gradient="success"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_kpi_card("✅", "Livrees",
+            str(int((cmd_df["status"] == "delivered").sum())), gradient="success"),
+            unsafe_allow_html=True)
 
-    with st.expander("🔍 Filtres avances", expanded=False):
-        col1, col2 = st.columns(2, gap="medium")
-=======
-    # KPIs
-    col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Total commandes", len(cmd_df))
-    col2.metric("En attente", int((cmd_df["status"] == "pending").sum()))
-    col3.metric("En livraison", int((cmd_df["status"] == "shipped").sum()))
-    col4.metric("Livrées", int((cmd_df["status"] == "delivered").sum()))
-
-    st.markdown("---")
-
-    # Filtres
-    with st.expander("🔍 Filtres", expanded=False):
-        col1, col2 = st.columns(2)
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-        with col1:
-            statuses = sorted(cmd_df["status"].unique())
-            selected_statuses = st.multiselect("Statuts", statuses, default=statuses)
-        with col2:
-            suppliers = sorted(cmd_df["supplier_id"].unique())
-            selected_suppliers = st.multiselect("Fournisseurs", suppliers, default=suppliers)
-
-        date_range = st.date_input(
-<<<<<<< HEAD
-            "Periode",
-            value=(cmd_df["order_date"].min().date(), cmd_df["order_date"].max().date()),
-        )
-
-=======
-            "Période",
-            value=(cmd_df["order_date"].min().date(), cmd_df["order_date"].max().date()),
-        )
-
-    # Filtrage
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-    filtered = cmd_df[
-        cmd_df["status"].isin(selected_statuses)
-        & cmd_df["supplier_id"].isin(selected_suppliers)
-    ].copy()
-
-    if isinstance(date_range, tuple) and len(date_range) == 2:
-        start, end = pd.Timestamp(date_range[0]), pd.Timestamp(date_range[1])
-        filtered = filtered[
-            (filtered["order_date"] >= start) & (filtered["order_date"] <= end)
-        ]
-
-<<<<<<< HEAD
-    st.markdown(
-        render_section_header("📋", "Liste des commandes",
-                             f"{len(filtered)} resultats filtres"),
-        unsafe_allow_html=True,
-    )
-=======
-    # Tableau enrichi
-    st.subheader(f"📋 Commandes ({len(filtered)} résultats)")
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-    display = filtered.merge(
+    st.markdown(render_section_header("📋", "Liste des commandes",
+        f"{len(cmd_df)} resultats"), unsafe_allow_html=True)
+    display = cmd_df.merge(
         fournisseurs_df[["supplier_id", "name"]].rename(columns={"name": "fournisseur"}),
         on="supplier_id", how="left",
     ).merge(
-        stock_df[["product_id", "name"]].rename(columns={"name": "produit"}),
+        stock_df[["product_id", "name", "color"]].rename(columns={"name": "produit"}),
         on="product_id", how="left",
     )
-
     st.dataframe(
-        display[["commande_id", "order_date", "product_id", "produit",
+        display[["commande_id", "order_date", "product_id", "produit", "color",
                  "quantity", "supplier_id", "fournisseur", "status"]]
         .sort_values("order_date", ascending=False),
-        use_container_width=True,
-        hide_index=True,
-    )
+        use_container_width=True, hide_index=True)
 
-<<<<<<< HEAD
-    st.markdown(
-        render_section_header("➕", "Nouvelle commande",
-                             "Passer une commande chez un fournisseur"),
-        unsafe_allow_html=True,
-    )
+    st.markdown(render_section_header("➕", "Nouvelle commande",
+        "Passer une commande chez un fournisseur"), unsafe_allow_html=True)
     with st.form("new_commande_form"):
         col1, col2 = st.columns(2, gap="medium")
-=======
-    # Création nouvelle commande
-    st.markdown("---")
-    st.subheader("➕ Nouvelle commande")
-
-    with st.form("new_commande_form"):
-        col1, col2 = st.columns(2)
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         with col1:
-            new_product = st.selectbox(
-                "Produit",
-                options=stock_df["product_id"].tolist(),
-                format_func=lambda pid: f"{pid} - {stock_df.loc[stock_df['product_id'] == pid, 'name'].iloc[0]}",
-            )
-<<<<<<< HEAD
+            new_product = st.selectbox("Produit", options=stock_df["product_id"].tolist(),
+                format_func=lambda pid: f"{pid} - {stock_df.loc[stock_df['product_id'] == pid, 'name'].iloc[0]}")
             new_quantity = st.number_input("Quantite", min_value=1, value=50, step=1)
-=======
-            new_quantity = st.number_input("Quantité", min_value=1, value=50, step=1)
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         with col2:
-            new_supplier = st.selectbox(
-                "Fournisseur",
-                options=fournisseurs_df["supplier_id"].tolist(),
-                format_func=lambda sid: f"{sid} - {fournisseurs_df.loc[fournisseurs_df['supplier_id'] == sid, 'name'].iloc[0]}",
-            )
+            new_supplier = st.selectbox("Fournisseur", options=fournisseurs_df["supplier_id"].tolist(),
+                format_func=lambda sid: f"{sid} - {fournisseurs_df.loc[fournisseurs_df['supplier_id'] == sid, 'name'].iloc[0]}")
             new_status = st.selectbox("Statut initial", ["pending", "shipped"])
-
-<<<<<<< HEAD
         submit = st.form_submit_button("Creer la commande", type="primary")
-=======
-        submit = st.form_submit_button("Créer la commande", type="primary")
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
         if submit:
             try:
-                cmd_id = dm.add_commande(
-                    product_id=new_product,
-                    quantity=int(new_quantity),
-                    supplier_id=new_supplier,
-                    status=new_status,
-                )
-<<<<<<< HEAD
-                st.success(f"✅ Commande {cmd_id} creee avec succes")
-=======
-                st.success(f"✅ Commande {cmd_id} créée avec succès")
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
+                cmd_id = dm.add_commande(product_id=new_product, quantity=int(new_quantity),
+                    supplier_id=new_supplier, status=new_status)
+                st.success(f"✅ Commande {cmd_id} creee")
                 st.rerun()
             except Exception as e:
                 st.error(f"❌ {e}")
 
-<<<<<<< HEAD
-    st.markdown(
-        render_section_header("📊", "Analyse des commandes",
-                             "Patterns et tendances"),
-        unsafe_allow_html=True,
-    )
-    col1, col2 = st.columns(2, gap="medium")
-
-=======
-    # Visualisations
-    st.markdown("---")
-    st.subheader("📊 Analyse des commandes")
-
-    col1, col2 = st.columns(2)
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-    with col1:
-        by_supplier = (
-            filtered.merge(fournisseurs_df[["supplier_id", "name"]], on="supplier_id")
-            .groupby("name")["quantity"].sum()
-            .reset_index().sort_values("quantity", ascending=True)
-        )
-        fig1 = px.bar(
-            by_supplier, x="quantity", y="name", orientation="h",
-<<<<<<< HEAD
-            title="Volume par fournisseur",
-            color="quantity",
-            color_continuous_scale=[[0, "#a7f3d0"], [0.5, "#10b981"], [1, "#059669"]],
-        )
-        fig1 = apply_plotly_theme(fig1)
-        fig1.update_traces(marker_line_width=0, marker_cornerradius=5)
-        fig1.update_layout(height=420, showlegend=False, coloraxis_showscale=False)
-=======
-            title="Volume commandé par fournisseur",
-            labels={"name": "Fournisseur", "quantity": "Unités"},
-        )
-        fig1.update_layout(height=400)
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-        st.plotly_chart(fig1, use_container_width=True)
-
-    with col2:
-        daily = filtered.groupby("order_date")["quantity"].sum().reset_index()
-<<<<<<< HEAD
-        fig2 = go.Figure()
-        fig2.add_trace(go.Scatter(
-            x=daily["order_date"], y=daily["quantity"],
-            mode="lines+markers",
-            line=dict(color="#10b981", width=2.5, shape="spline"),
-            marker=dict(size=5),
-            fill="tozeroy",
-            fillcolor="rgba(16, 185, 129, 0.06)",
-        ))
-        fig2 = apply_plotly_theme(fig2)
-        fig2.update_layout(
-            title="Volume dans le temps",
-            xaxis_title="Date", yaxis_title="Unites",
-            height=420, showlegend=False,
-        )
-=======
-        fig2 = px.line(
-            daily, x="order_date", y="quantity",
-            title="Volume commandé dans le temps",
-            labels={"order_date": "Date", "quantity": "Unités"},
-        )
-        fig2.update_layout(height=400)
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
-        st.plotly_chart(fig2, use_container_width=True)
-
 
 # ============================================================
-# PAGE 5 : Robot (placeholder)
+# PAGE 5 : Robot
 # ============================================================
 
-<<<<<<< HEAD
 @st.cache_resource
 def get_robot_client() -> RobotClient:
     return RobotClient(host=settings.pi_host, port=settings.pi_port)
 
 
 def render_robot() -> None:
-    st.markdown(
-        render_page_header("Robot d'entrepot", "Pilotage du robot autonome"),
-        unsafe_allow_html=True,
-    )
+    st.markdown(render_page_header("Robot d'entrepot", "Pilotage du robot autonome"),
+                unsafe_allow_html=True)
 
     robot = get_robot_client()
     connected = robot.is_connected()
 
-    # ── Connexion status ──
     if connected:
-        st.markdown(
-            render_info_banner("🟢", "Robot connecte",
-                f"Connecte a <strong>{settings.pi_host}:{settings.pi_port}</strong>",
-                style="success"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_info_banner("🟢", "Robot connecte",
+            f"Connecte a <strong>{settings.pi_host}:{settings.pi_port}</strong>",
+            style="success"), unsafe_allow_html=True)
     else:
-        st.markdown(
-            render_info_banner("🔴", "Robot hors ligne",
-                f"Impossible de joindre <strong>{settings.pi_host}:{settings.pi_port}</strong>.<br>"
-                "Verifie que le serveur API tourne sur le Raspberry Pi :<br>"
-                "<code>python -m robot.api_server</code>",
-                style="danger"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_info_banner("🔴", "Robot hors ligne",
+            f"Impossible de joindre <strong>{settings.pi_host}:{settings.pi_port}</strong>.<br>"
+            "Verifie que le serveur API tourne sur le Raspberry Pi :<br>"
+            "<code>python api_server.py</code>",
+            style="danger"), unsafe_allow_html=True)
 
-    # ── Etat temps reel ──
-    st.markdown(
-        render_section_header("📡", "Etat du robot", "Donnees temps reel"),
-        unsafe_allow_html=True,
-    )
+    st.markdown(render_section_header("📡", "Etat du robot", "Donnees temps reel"),
+                unsafe_allow_html=True)
 
-    if connected:
-        status = robot.status()
-    else:
-        status = {
-            "status": "offline", "battery": "--", "position": "--",
-            "mission_active": False, "distance_cm": "--",
-            "last_color_detected": "--", "arm_state": "--",
-            "line_sensors": {"left": 0, "center": 0, "right": 0},
-        }
+    status = robot.status() if connected else {
+        "status": "offline", "battery": "--", "position": "--",
+        "mission_active": False, "distance_cm": "--",
+        "last_color_detected": "--", "arm_state": "--",
+        "line_sensors": {"left": 0, "center": 0, "right": 0},
+    }
 
     stat_label = status.get("status", "offline")
     stat_map = {
-        "idle": ("Inactif", "success"),
-        "moving": ("En mouvement", "teal"),
-        "turning": ("Rotation", "blue"),
-        "mission": ("Mission active", "main"),
+        "idle": ("Inactif", "success"), "moving": ("En mouvement", "teal"),
+        "turning": ("Rotation", "blue"), "mission": ("Mission active", "main"),
         "offline": ("Hors ligne", "danger"),
     }
     stat_text, stat_grad = stat_map.get(stat_label, ("Inconnu", "warning"))
 
     col1, col2, col3, col4 = st.columns(4, gap="medium")
     with col1:
-        st.markdown(
-            render_kpi_card("⚡", "Etat", stat_text, gradient=stat_grad),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_kpi_card("⚡", "Etat", stat_text, gradient=stat_grad),
+                    unsafe_allow_html=True)
     with col2:
         dist = status.get("distance_cm", "--")
-        dist_str = f"{dist} cm" if isinstance(dist, (int, float)) else "--"
-        st.markdown(
-            render_kpi_card("📏", "Distance", dist_str,
-                sublabel="Capteur ultrason", gradient="blue"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_kpi_card("📏", "Distance",
+            f"{dist} cm" if isinstance(dist, (int, float)) else "--",
+            sublabel="Capteur ultrason", gradient="blue"), unsafe_allow_html=True)
     with col3:
-        color_det = status.get("last_color_detected", "--") or "--"
-        st.markdown(
-            render_kpi_card("🎨", "Couleur", color_det,
-                sublabel="Camera", gradient="purple"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_kpi_card("🎨", "Couleur",
+            status.get("last_color_detected", "--") or "--",
+            sublabel="Camera", gradient="purple"), unsafe_allow_html=True)
     with col4:
         arm = status.get("arm_state", "--")
-        arm_map = {"repos": "Libre", "charge": "Charge"}
-        st.markdown(
-            render_kpi_card("🦾", "Bras", arm_map.get(arm, arm),
-                sublabel="Etat pince", gradient="teal"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_kpi_card("🦾", "Bras",
+            {"repos": "Libre", "charge": "Charge"}.get(arm, arm),
+            sublabel="Etat pince", gradient="teal"), unsafe_allow_html=True)
 
-    # ── Capteurs ligne ──
     sensors = status.get("line_sensors", {})
-    s_left = sensors.get("left", 0)
-    s_center = sensors.get("center", 0)
-    s_right = sensors.get("right", 0)
+    sl, sc, sr = sensors.get("left", 0), sensors.get("center", 0), sensors.get("right", 0)
     st.markdown(
         f'<div style="display:flex;gap:1rem;justify-content:center;margin:1rem 0;">'
         f'<div style="text-align:center;padding:0.75rem 1.5rem;border-radius:1rem;'
-        f'background:{"#10b981" if s_left else "#FF6B6B"};color:white;font-weight:700;'
-        f'font-size:0.85rem;">G {"ON" if s_left else "OFF"}</div>'
+        f'background:{"#10b981" if sl else "#FF6B6B"};color:white;font-weight:700;">G {"ON" if sl else "OFF"}</div>'
         f'<div style="text-align:center;padding:0.75rem 1.5rem;border-radius:1rem;'
-        f'background:{"#10b981" if s_center else "#FF6B6B"};color:white;font-weight:700;'
-        f'font-size:0.85rem;">C {"ON" if s_center else "OFF"}</div>'
+        f'background:{"#10b981" if sc else "#FF6B6B"};color:white;font-weight:700;">C {"ON" if sc else "OFF"}</div>'
         f'<div style="text-align:center;padding:0.75rem 1.5rem;border-radius:1rem;'
-        f'background:{"#10b981" if s_right else "#FF6B6B"};color:white;font-weight:700;'
-        f'font-size:0.85rem;">D {"ON" if s_right else "OFF"}</div>'
-        f'</div>',
-        unsafe_allow_html=True,
-    )
+        f'background:{"#10b981" if sr else "#FF6B6B"};color:white;font-weight:700;">D {"ON" if sr else "OFF"}</div>'
+        f'</div>', unsafe_allow_html=True)
 
-    # ── Controle manuel ──
-    st.markdown(
-        render_section_header("🎮", "Controle manuel", "Pilotage direct du robot"),
-        unsafe_allow_html=True,
-    )
+    st.markdown(render_section_header("🎮", "Controle manuel", "Pilotage direct"),
+                unsafe_allow_html=True)
 
-    col_left, col_center, col_right = st.columns([1, 2, 1], gap="medium")
-
+    _, col_center, _ = st.columns([1, 2, 1], gap="medium")
     with col_center:
-        r1c1, r1c2, r1c3 = st.columns(3)
-        with r1c2:
+        _, c2, _ = st.columns(3)
+        with c2:
             if st.button("⬆️ Avancer", use_container_width=True, disabled=not connected):
-                robot.forward()
-                st.toast("Robot avance")
-
-        r2c1, r2c2, r2c3 = st.columns(3)
-        with r2c1:
+                robot.forward(); st.toast("Avance")
+        c1, c2, c3 = st.columns(3)
+        with c1:
             if st.button("⬅️ Gauche", use_container_width=True, disabled=not connected):
-                robot.left()
-                st.toast("Tourne a gauche")
-        with r2c2:
+                robot.left(); st.toast("Gauche")
+        with c2:
             if st.button("⏹️ Stop", type="primary", use_container_width=True, disabled=not connected):
-                robot.stop()
-                st.toast("Robot arrete")
-        with r2c3:
+                robot.stop(); st.toast("Stop")
+        with c3:
             if st.button("➡️ Droite", use_container_width=True, disabled=not connected):
-                robot.right()
-                st.toast("Tourne a droite")
-
-        r3c1, r3c2, r3c3 = st.columns(3)
-        with r3c2:
+                robot.right(); st.toast("Droite")
+        _, c2, _ = st.columns(3)
+        with c2:
             if st.button("⬇️ Reculer", use_container_width=True, disabled=not connected):
-                robot.backward()
-                st.toast("Robot recule")
+                robot.backward(); st.toast("Recule")
 
-    # ── Bras robotique ──
-    st.markdown(
-        render_section_header("🦾", "Bras robotique", "Controle de la pince"),
-        unsafe_allow_html=True,
-    )
-
+    st.markdown(render_section_header("🦾", "Bras robotique", "Controle de la pince"),
+                unsafe_allow_html=True)
     col1, col2, col3, col4 = st.columns(4, gap="medium")
     with col1:
         if st.button("📦 Prendre", use_container_width=True, disabled=not connected):
-            with st.spinner("Prise en cours..."):
-                robot.pick()
+            with st.spinner("Prise..."): robot.pick()
             st.toast("Objet saisi")
     with col2:
         if st.button("📤 Deposer", use_container_width=True, disabled=not connected):
-            with st.spinner("Depot en cours..."):
-                robot.drop()
+            with st.spinner("Depot..."): robot.drop()
             st.toast("Objet depose")
     with col3:
         if st.button("💡 LED ON", use_container_width=True, disabled=not connected):
@@ -1713,7 +835,6 @@ def render_robot() -> None:
         if st.button("🔇 LED OFF", use_container_width=True, disabled=not connected):
             robot.led_off()
 
-    # ── Servo manuel ──
     with st.expander("⚙️ Servo manuel"):
         sc1, sc2, sc3 = st.columns([1, 2, 1])
         with sc1:
@@ -1721,21 +842,14 @@ def render_robot() -> None:
         with sc2:
             servo_angle = st.slider("Angle", 0, 180, 90)
         with sc3:
-            st.write("")
-            st.write("")
+            st.write(""); st.write("")
             if st.button("Appliquer", disabled=not connected):
                 robot.servo(servo_ch, servo_angle)
-                st.toast(f"Servo {servo_ch} → {servo_angle}")
 
-    # ── Mission autonome ──
-    st.markdown(
-        render_section_header("🚀", "Mission autonome",
-            "Lancer une mission de pick & drop par couleur"),
-        unsafe_allow_html=True,
-    )
+    st.markdown(render_section_header("🚀", "Mission autonome",
+        "Lancer une mission de pick & drop par couleur"), unsafe_allow_html=True)
 
     couleurs = sorted(stock_df["color"].dropna().unique().tolist())
-
     mission_active = status.get("mission_active", False)
 
     col1, col2 = st.columns(2, gap="medium")
@@ -1743,7 +857,8 @@ def render_robot() -> None:
         pick_color = st.selectbox("Couleur a PRENDRE", couleurs, index=0,
                                   disabled=mission_active or not connected)
     with col2:
-        drop_color = st.selectbox("Couleur de DEPOT", couleurs, index=2,
+        drop_color = st.selectbox("Couleur de DEPOT", couleurs,
+                                  index=min(1, len(couleurs)-1),
                                   disabled=mission_active or not connected)
 
     col1, col2 = st.columns(2, gap="medium")
@@ -1753,27 +868,20 @@ def render_robot() -> None:
                          use_container_width=True, disabled=not connected):
                 result = robot.start_mission(pick_color, drop_color)
                 if result.get("ok"):
-                    st.toast(f"Mission lancee : {pick_color} → {drop_color}")
+                    st.toast(f"Mission : {pick_color} → {drop_color}")
                     st.rerun()
                 else:
-                    st.error(result.get("error", "Erreur inconnue"))
+                    st.error(result.get("error", "Erreur"))
         else:
-            st.markdown(
-                render_info_banner("🟢", "Mission en cours",
-                    f"Prendre : <strong>{status.get('mission_color_pick', '?')}</strong> · "
-                    f"Deposer : <strong>{status.get('mission_color_drop', '?')}</strong>",
-                    style="success"),
-                unsafe_allow_html=True,
-            )
+            st.markdown(render_info_banner("🟢", "Mission en cours",
+                f"Prendre : <strong>{status.get('mission_color_pick', '?')}</strong> · "
+                f"Deposer : <strong>{status.get('mission_color_drop', '?')}</strong>",
+                style="success"), unsafe_allow_html=True)
     with col2:
         if mission_active:
-            if st.button("🛑 Arreter la mission", type="primary",
-                         use_container_width=True):
-                robot.stop_mission()
-                st.toast("Mission arretee")
-                st.rerun()
+            if st.button("🛑 Arreter la mission", type="primary", use_container_width=True):
+                robot.stop_mission(); st.toast("Mission arretee"); st.rerun()
 
-    # ── Rafraichir ──
     st.markdown("<br>", unsafe_allow_html=True)
     if st.button("🔄 Rafraichir l'etat", use_container_width=True):
         st.rerun()
@@ -1784,274 +892,105 @@ def render_robot() -> None:
 # ============================================================
 
 def render_emplacements() -> None:
-    st.markdown(
-        render_page_header("Emplacements optimises",
-                           "Proposition de placement basee sur la demande prevue"),
-        unsafe_allow_html=True,
-    )
+    st.markdown(render_page_header("Emplacements optimises",
+        "Proposition de placement basee sur la demande prevue"), unsafe_allow_html=True)
 
-    st.markdown(
-        render_info_banner(
-            "💡",
-            "Principe d'optimisation",
-            "Les produits les plus demandes sont places <strong>au plus proche du point "
-            "d'expedition (A1-R1)</strong>. Les produits moins demandes sont places dans "
-            "les zones eloignees. Cela reduit le temps de picking et les deplacements du robot.",
-            style="info",
-        ),
-        unsafe_allow_html=True,
-    )
+    st.markdown(render_info_banner("💡", "Principe",
+        "Les produits les plus demandes sont places <strong>au plus proche du point "
+        "d'expedition (A1-R1)</strong>. Cela reduit le temps de picking et les deplacements du robot.",
+        style="info"), unsafe_allow_html=True)
 
-    # ── Configuration ──
-    st.markdown(
-        render_section_header("⚙️", "Configuration", "Parametres de l'optimisation"),
-        unsafe_allow_html=True,
-    )
+    st.markdown(render_section_header("⚙️", "Configuration", "Parametres"), unsafe_allow_html=True)
 
     col1, col2 = st.columns(2, gap="medium")
     with col1:
-        horizon_empl = st.slider(
-            "Horizon de prediction (jours)",
-            min_value=1, max_value=30, value=7,
-            key="horizon_empl",
-        )
+        horizon_empl = st.slider("Horizon de prediction (jours)", 1, 30, 7, key="horizon_empl")
     with col2:
-        nb_allees = st.number_input("Nombre d'allees", min_value=1, max_value=10, value=5)
-        nb_rangees = st.number_input("Nombre de rangees", min_value=1, max_value=10, value=6)
+        nb_allees = st.number_input("Nombre d'allees", 1, 10, 5)
+        nb_rangees = st.number_input("Nombre de rangees", 1, 10, 6)
 
     if st.button("🚀 Generer les emplacements optimises", type="primary"):
         with st.spinner("Calcul des previsions pour tous les produits..."):
             demandes = {}
-            erreurs = []
             for pid in stock_df["product_id"].tolist():
                 try:
-                    preds = engine.predict(
-                        product_id=pid,
-                        n_days=horizon_empl,
-                        history_csv=settings.historique_csv,
-                    )
+                    preds = engine.predict(product_id=pid, n_days=horizon_empl,
+                                           history_csv=settings.historique_csv)
                     demandes[pid] = int(preds.sum())
                 except Exception:
-                    erreurs.append(pid)
                     demandes[pid] = 0
 
-            if erreurs:
-                st.warning(f"Prediction echouee pour {len(erreurs)} produit(s) : {', '.join(erreurs[:5])}")
-
             produits_tries = sorted(demandes.items(), key=lambda x: x[1], reverse=True)
-
-            emplacements = []
-            for allee in range(1, nb_allees + 1):
-                for rangee in range(1, nb_rangees + 1):
-                    emplacements.append(f"A{allee}-R{rangee}")
+            emplacements = [f"A{a}-R{r}" for a in range(1, nb_allees+1) for r in range(1, nb_rangees+1)]
 
             resultats = []
             for i, (pid, dem_tot) in enumerate(produits_tries):
                 row = stock_df.loc[stock_df["product_id"] == pid].iloc[0]
-                nom = row["name"]
-                cat = row["category"]
-                couleur = row.get("color", "")
-                qty = int(row["quantity"])
+                nouveau = emplacements[i] if i < len(emplacements) else "Extension"
                 ancien = row["location"]
-                nouveau = emplacements[i] if i < len(emplacements) else "Zone extension"
-                change = "✅ Inchange" if ancien == nouveau else f"🔄 {ancien} → {nouveau}"
                 resultats.append({
-                    "Rang": i + 1,
-                    "Produit": pid,
-                    "Nom": nom,
-                    "Couleur": couleur,
-                    "Categorie": cat,
-                    "Stock": qty,
-                    "Demande prevue": dem_tot,
-                    "Ancien empl.": ancien,
+                    "Rang": i + 1, "Produit": pid, "Nom": row["name"],
+                    "Couleur": row.get("color", ""), "Stock": int(row["quantity"]),
+                    "Demande prevue": dem_tot, "Ancien empl.": ancien,
                     "Nouvel empl.": nouveau,
-                    "Statut": change,
+                    "Statut": "✅ Inchange" if ancien == nouveau else f"🔄 {ancien} → {nouveau}",
                 })
 
             st.session_state["emplacements_resultats"] = resultats
-            st.session_state["emplacements_demandes"] = demandes
             st.success(f"✅ Emplacements calcules pour {len(resultats)} produits")
 
     if "emplacements_resultats" in st.session_state:
         resultats = st.session_state["emplacements_resultats"]
-        demandes = st.session_state["emplacements_demandes"]
-
-        # ── KPI ──
         nb_changes = sum(1 for r in resultats if "🔄" in r["Statut"])
-        nb_total = len(resultats)
-        top_produit = resultats[0] if resultats else None
 
         col1, col2, col3 = st.columns(3, gap="medium")
         with col1:
-            st.markdown(
-                render_kpi_card("📦", "Produits analyses", str(nb_total), gradient="main"),
-                unsafe_allow_html=True,
-            )
+            st.markdown(render_kpi_card("📦", "Produits", str(len(resultats)),
+                gradient="main"), unsafe_allow_html=True)
         with col2:
-            st.markdown(
-                render_kpi_card("🔄", "Deplacements proposes", str(nb_changes),
-                    sublabel=f"{nb_total - nb_changes} inchanges", gradient="warning"),
-                unsafe_allow_html=True,
-            )
+            st.markdown(render_kpi_card("🔄", "Deplacements", str(nb_changes),
+                sublabel=f"{len(resultats) - nb_changes} inchanges", gradient="warning"),
+                unsafe_allow_html=True)
         with col3:
-            if top_produit:
-                st.markdown(
-                    render_kpi_card("🏆", "Plus demande", top_produit["Nom"],
-                        sublabel=f"{top_produit['Demande prevue']} u. prevues",
-                        gradient="purple"),
-                    unsafe_allow_html=True,
-                )
+            if resultats:
+                st.markdown(render_kpi_card("🏆", "Plus demande", resultats[0]["Nom"],
+                    sublabel=f"{resultats[0]['Demande prevue']} u.",
+                    gradient="purple"), unsafe_allow_html=True)
 
-        # ── Tableau ──
-        st.markdown(
-            render_section_header("📋", "Plan d'emplacement",
-                "Classe par demande decroissante — rang 1 = plus proche expedition"),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_section_header("📋", "Plan d'emplacement",
+            "Classe par demande decroissante"), unsafe_allow_html=True)
+        st.dataframe(pd.DataFrame(resultats), use_container_width=True, hide_index=True)
 
-        result_df = pd.DataFrame(resultats)
-        st.dataframe(result_df, use_container_width=True, hide_index=True)
-
-        # ── Graphique demande ──
-        st.markdown(
-            render_section_header("📊", "Demande prevue par produit",
-                "Visualisation du volume prevu"),
-            unsafe_allow_html=True,
-        )
-
-        chart_df = pd.DataFrame([
-            {"Produit": r["Produit"], "Nom": r["Nom"], "Demande": r["Demande prevue"]}
-            for r in resultats
-        ]).sort_values("Demande", ascending=True).tail(15)
-
-        fig = px.bar(
-            chart_df, x="Demande", y="Nom", orientation="h",
-            title="Top 15 — Demande prevue",
-            color="Demande",
-            color_continuous_scale=[[0, "#A29BFE"], [0.5, "#6C5CE7"], [1, "#5A4BD1"]],
-        )
+        st.markdown(render_section_header("📊", "Demande prevue par produit", ""),
+                    unsafe_allow_html=True)
+        chart_df = pd.DataFrame([{"Nom": r["Nom"], "Demande": r["Demande prevue"],
+            "Couleur": r["Couleur"]} for r in resultats]).sort_values("Demande", ascending=True)
+        fig = px.bar(chart_df, x="Demande", y="Nom", orientation="h", color="Couleur",
+                     title="Demande prevue par produit")
         fig = apply_plotly_theme(fig)
         fig.update_traces(marker_line_width=0, marker_cornerradius=5)
-        fig.update_layout(
-            height=500, showlegend=False, coloraxis_showscale=False,
-            xaxis_title="Demande totale prevue (unites)", yaxis_title="",
-        )
+        fig.update_layout(height=400, xaxis_title="Demande totale (unites)", yaxis_title="")
         st.plotly_chart(fig, use_container_width=True)
 
-        # ── Carte visuelle entrepot ──
-        st.markdown(
-            render_section_header("🗺️", "Carte de l'entrepot",
-                "Visualisation de la densite par emplacement"),
-            unsafe_allow_html=True,
-        )
-
-        grid_data = []
-        for r in resultats:
-            empl = r["Nouvel empl."]
-            if empl.startswith("A") and "-R" in empl:
-                parts = empl.split("-")
-                allee = int(parts[0][1:])
-                rangee = int(parts[1][1:])
-                grid_data.append({
-                    "Allee": f"A{allee}",
-                    "Rangee": f"R{rangee}",
-                    "allee_num": allee,
-                    "rangee_num": rangee,
-                    "Demande": r["Demande prevue"],
-                    "Produit": r["Nom"],
-                })
-
-        if grid_data:
-            grid_df = pd.DataFrame(grid_data)
-            fig_heat = px.density_heatmap(
-                grid_df, x="Allee", y="Rangee", z="Demande",
-                title="Densite de demande par zone",
-                color_continuous_scale=[[0, "#F0F3FF"], [0.5, "#A29BFE"], [1, "#6C5CE7"]],
-            )
-            fig_heat = apply_plotly_theme(fig_heat)
-            fig_heat.update_layout(height=400)
-            st.plotly_chart(fig_heat, use_container_width=True)
-
-        # ── Info methodologie ──
-        st.markdown(
-            render_info_banner(
-                "📐",
-                "Methodologie",
-                "L'algorithme predit la demande de chaque produit sur l'horizon choisi, "
-                "puis les trie par demande decroissante. L'emplacement <strong>A1-R1</strong> "
-                "(le plus proche du point d'expedition) est attribue au produit le plus demande, "
-                "<strong>A1-R2</strong> au deuxieme, etc. Les allees sont parcourues en priorite "
-                "avant de passer a la rangee suivante.",
-                style="info",
-            ),
-            unsafe_allow_html=True,
-        )
+        st.markdown(render_info_banner("📐", "Methodologie",
+            "L'emplacement <strong>A1-R1</strong> (le plus proche de l'expedition) est "
+            "attribue au produit le plus demande, etc.", style="info"), unsafe_allow_html=True)
 
 
 # ============================================================
 # Routeur
-=======
-def render_robot() -> None:
-    st.title("🤖 Robot d'entrepôt")
-    st.markdown("---")
-
-    st.info(
-        "🚧 **Module en cours de développement**\n\n"
-        "Cette page affichera :\n"
-        "- L'état temps réel du robot (position, batterie, charge)\n"
-        "- Les missions en cours et en attente\n"
-        "- Les commandes manuelles (déplacement, retour à la base)\n"
-        "- L'historique des actions exécutées\n\n"
-        "Le module `robot/` est en développement par un autre membre du groupe."
-    )
-
-    st.markdown("---")
-    st.subheader("Aperçu visuel (données simulées)")
-
-    col1, col2, col3, col4 = st.columns(4)
-    col1.metric("État", "🟢 Inactif")
-    col2.metric("Batterie", "87%", delta="-3%")
-    col3.metric("Position", "(0, 0)")
-    col4.metric("Missions terminées", "0")
-
-    st.markdown("---")
-    st.subheader("Missions en attente (mock)")
-    st.dataframe(
-        {
-            "ID": ["M00001", "M00002", "M00003"],
-            "Type": ["Réapprovisionnement", "Picking", "Réapprovisionnement"],
-            "Produit": ["P003", "P012", "P018"],
-            "Quantité": [50, 10, 30],
-            "Priorité": [2, 4, 5],
-            "Statut": ["⏳ En attente", "⏳ En attente", "⏳ En attente"],
-        },
-        use_container_width=True,
-        hide_index=True,
-    )
-
-    st.caption(
-        "💡 Quand le module robot sera intégré, ces données proviendront du "
-        "`MissionManager` et du `RobotController` en temps réel."
-    )
-
-
-# ============================================================
-# Routeur : appelle la fonction de la page sélectionnée
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 # ============================================================
 
 if page == "🏠 Vue d'ensemble":
     render_overview()
 elif page == "📦 Stock":
     render_stock()
-elif page == "📈 Prédictions":
+elif page == "📈 Predictions":
     render_predictions()
-<<<<<<< HEAD
 elif page == "📍 Emplacements":
     render_emplacements()
-=======
->>>>>>> 2888211bcf8e76a71c019d6f8b5337a1e374ef9f
 elif page == "🚚 Commandes":
     render_commandes()
 elif page == "🤖 Robot":
     render_robot()
+    
