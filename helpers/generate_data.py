@@ -35,7 +35,7 @@ HISTORY_DAYS = 365          # Jours d'historique de demande
 NUM_PAST_COMMANDES = 20     # Nombre de commandes passées à générer
 
 # Catégories de produits
-CATEGORIES = ["Électronique"]
+CATEGORIES = ["Électronique", "Alimentaire", "Textile", "Outillage"]
 
 # Couleur associée à chaque produit (pour l'UI et le robot)
 PRODUCT_COLORS = ["Jaune", "Bleu", "Marron", "Noir"]
